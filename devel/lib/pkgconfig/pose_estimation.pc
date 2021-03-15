@@ -1,0 +1,8 @@
+prefix=/home/mohit/v360_ws/devel
+
+Name: pose_estimation
+Description: Description of pose_estimation
+Version: 0.0.0
+Cflags: -I/home/mohit/v360_ws/src/pose_estimation/include
+Libs: -L${prefix}/lib 
+Requires: 
