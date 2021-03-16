@@ -15,18 +15,14 @@
 
 #include <pcl/common/common.h>
 #include <pcl/io/obj_io.h>
-#include <pcl/io/vtk_lib_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/filters/project_inliers.h>
+#include <pcl/segmentation/sac_segmentation.h>
 
 #include <fstream>
 #include <iostream>
 
 
-
-
-
-
-typedef pcl::PointXYZRGBA PointType;
 
 
 class main_class
@@ -38,14 +34,15 @@ private:
     pcl::PointCloud<pcl::PointXYZ> human_points;
 
 
-
 public:
     pcl::visualization::PCLVisualizer viewer;
     main_class(std::string, std::string);
     void add_cordinate_system(bool);
-    void visualize_data();
+    void visualize_data(bool, bool);
 
     std::vector<int> get_waist_points_indices();
+    void get_plane_coefficients_for_height(pcl::ModelCoefficients::Ptr);
+    std::vector<float> get_height_of_person(pcl::ModelCoefficients::Ptr, pcl::PointCloud<pcl::PointXYZ>::Ptr);
 
 
 };

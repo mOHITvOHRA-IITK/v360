@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     std::string path = ros::package::getPath("pose_estimation");
     std::string data_folder_path(path + "/data/");
     std::ofstream myfile;
-    myfile.open (data_folder_path + "waist_indices.txt", std::ios::out);
+    myfile.open (data_folder_path + "indices.txt", std::ios::out);
 
 
     while(ros::ok())
@@ -143,10 +143,12 @@ int main(int argc, char **argv)
 
         if (all_indices.size() > 0)
         {
+
+            std::cout << "all_indices.size() " << all_indices.size() << "\n";
+
             viewer.addSphere (current_point, 0.005, 1.0, 0.0, 0.0, "sphere");
             viewer.addSphere (first_point, 0.005, 0.0, 0.0, 1.0, "sphere2");
 
-            std::cout << "all_indices.size() " << all_indices.size() << "\n";
             for (int i=1; i<all_indices.size(); i++)
             {
                 pcl::PointXYZ p1, p2;
@@ -156,26 +158,32 @@ int main(int argc, char **argv)
                 viewer.addLine(p1, p2, 0, 1, 0, std::to_string(i));
                 viewer.setShapeRenderingProperties(pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 20, std::to_string(i));
             }
+
+
+
+            //            std::cout << "all_indices.size() " << all_indices.size() << "\n";
+            //            viewer.addSphere (first_point, 0.005, 0.0, 0.0, 1.0, "sphere2");
+            //            for (int i=1; i<all_indices.size(); i++)
+            //            {
+            //                pcl::PointXYZ p1;
+            //                p1 = current_point_cloud_pntr->points[all_indices[i]];
+            //                viewer.addSphere (p1, 0.005, 1.0, 0.0, 0.0, std::to_string(i));
+            //            }
+
         }
+
 
         viewer.spinOnce();
 
         if (all_indices.size() > 0)
         {
-            viewer.removeShape("sphere");
+            //        viewer.removeShape("sphere");
             viewer.removeShape("sphere2");
+
             for (int i=1; i<all_indices.size(); i++)
             {
                 viewer.removeShape(std::to_string(i));
             }
-
-            //        if (store_index)
-            //        {
-            //            myfile << std::setprecision(15) << searchPoint.x << ", "
-            //                   << searchPoint.y << ", "
-            //                   << searchPoint.z << "\n";
-
-            //        }
         }
 
 

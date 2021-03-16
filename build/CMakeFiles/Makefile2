@@ -408,6 +408,7 @@ clean: gtest/googlemock/gtest/CMakeFiles/gtest.dir/clean
 # Directory level rules for directory pose_estimation
 
 # Convenience name for "all" pass in the directory.
+pose_estimation/all: pose_estimation/CMakeFiles/webcam_topic_publish.dir/all
 pose_estimation/all: pose_estimation/CMakeFiles/pose_estimation_generate_messages.dir/all
 pose_estimation/all: pose_estimation/CMakeFiles/get_selected_indices.dir/all
 pose_estimation/all: pose_estimation/CMakeFiles/visualize_data.dir/all
@@ -415,6 +416,7 @@ pose_estimation/all: pose_estimation/CMakeFiles/visualize_data.dir/all
 .PHONY : pose_estimation/all
 
 # Convenience name for "clean" pass in the directory.
+pose_estimation/clean: pose_estimation/CMakeFiles/webcam_topic_publish.dir/clean
 pose_estimation/clean: pose_estimation/CMakeFiles/pose_estimation_genpy.dir/clean
 pose_estimation/clean: pose_estimation/CMakeFiles/pose_estimation_generate_messages_py.dir/clean
 pose_estimation/clean: pose_estimation/CMakeFiles/pose_estimation_gennodejs.dir/clean
@@ -513,6 +515,43 @@ pose_estimation/clean: pose_estimation/CMakeFiles/tf2_msgs_generate_messages_nod
 pose_estimation/preinstall:
 
 .PHONY : pose_estimation/preinstall
+
+#=============================================================================
+# Target rules for target pose_estimation/CMakeFiles/webcam_topic_publish.dir
+
+# All Build rule for target.
+pose_estimation/CMakeFiles/webcam_topic_publish.dir/all: pose_estimation/CMakeFiles/pose_estimation_generate_messages_cpp.dir/all
+	$(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/depend
+	$(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mohit/v360_ws/build/CMakeFiles --progress-num=18,19 "Built target webcam_topic_publish"
+.PHONY : pose_estimation/CMakeFiles/webcam_topic_publish.dir/all
+
+# Include target in all.
+all: pose_estimation/CMakeFiles/webcam_topic_publish.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mohit/v360_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 pose_estimation/CMakeFiles/webcam_topic_publish.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mohit/v360_ws/build/CMakeFiles 0
+.PHONY : pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule
+
+# Convenience name for target.
+webcam_topic_publish: pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule
+
+.PHONY : webcam_topic_publish
+
+# clean rule for target.
+pose_estimation/CMakeFiles/webcam_topic_publish.dir/clean:
+	$(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/clean
+.PHONY : pose_estimation/CMakeFiles/webcam_topic_publish.dir/clean
+
+# clean rule for target.
+clean: pose_estimation/CMakeFiles/webcam_topic_publish.dir/clean
+
+.PHONY : clean
 
 #=============================================================================
 # Target rules for target pose_estimation/CMakeFiles/pose_estimation_genpy.dir

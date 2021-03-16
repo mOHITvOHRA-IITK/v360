@@ -168,6 +168,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule:
+	cd /home/mohit/v360_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule
+.PHONY : pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule
+
+# Convenience name for target.
+webcam_topic_publish: pose_estimation/CMakeFiles/webcam_topic_publish.dir/rule
+
+.PHONY : webcam_topic_publish
+
+# fast build rule for target.
+webcam_topic_publish/fast:
+	cd /home/mohit/v360_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/build
+.PHONY : webcam_topic_publish/fast
+
+# Convenience name for target.
 pose_estimation/CMakeFiles/pose_estimation_genpy.dir/rule:
 	cd /home/mohit/v360_ws/build && $(MAKE) -f CMakeFiles/Makefile2 pose_estimation/CMakeFiles/pose_estimation_genpy.dir/rule
 .PHONY : pose_estimation/CMakeFiles/pose_estimation_genpy.dir/rule
@@ -1613,6 +1628,33 @@ src/visualize_data.cpp.s:
 	cd /home/mohit/v360_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/visualize_data.dir/build.make pose_estimation/CMakeFiles/visualize_data.dir/src/visualize_data.cpp.s
 .PHONY : src/visualize_data.cpp.s
 
+src/webcam_topic_publish.o: src/webcam_topic_publish.cpp.o
+
+.PHONY : src/webcam_topic_publish.o
+
+# target to build an object file
+src/webcam_topic_publish.cpp.o:
+	cd /home/mohit/v360_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/src/webcam_topic_publish.cpp.o
+.PHONY : src/webcam_topic_publish.cpp.o
+
+src/webcam_topic_publish.i: src/webcam_topic_publish.cpp.i
+
+.PHONY : src/webcam_topic_publish.i
+
+# target to preprocess a source file
+src/webcam_topic_publish.cpp.i:
+	cd /home/mohit/v360_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/src/webcam_topic_publish.cpp.i
+.PHONY : src/webcam_topic_publish.cpp.i
+
+src/webcam_topic_publish.s: src/webcam_topic_publish.cpp.s
+
+.PHONY : src/webcam_topic_publish.s
+
+# target to generate assembly for a file
+src/webcam_topic_publish.cpp.s:
+	cd /home/mohit/v360_ws/build && $(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/src/webcam_topic_publish.cpp.s
+.PHONY : src/webcam_topic_publish.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1624,6 +1666,7 @@ help:
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... test"
+	@echo "... webcam_topic_publish"
 	@echo "... pose_estimation_genpy"
 	@echo "... pose_estimation_generate_messages_py"
 	@echo "... pose_estimation_gennodejs"
@@ -1726,6 +1769,9 @@ help:
 	@echo "... src/visualize_data.o"
 	@echo "... src/visualize_data.i"
 	@echo "... src/visualize_data.s"
+	@echo "... src/webcam_topic_publish.o"
+	@echo "... src/webcam_topic_publish.i"
+	@echo "... src/webcam_topic_publish.s"
 .PHONY : help
 
 

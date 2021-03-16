@@ -63,3 +63,9 @@ target_link_libraries(get_selected_indices ${catkin_LIBRARIES} ${OpenCV_LIBS} ${
 add_dependencies(get_selected_indices pose_estimation_generate_messages_cpp)
 
 
+
+add_executable(webcam_topic_publish src/webcam_topic_publish.cpp)
+target_link_libraries(webcam_topic_publish ${catkin_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES})
+add_dependencies(webcam_topic_publish pose_estimation_generate_messages_cpp)
+
+

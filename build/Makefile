@@ -285,6 +285,19 @@ gtest/fast:
 .PHONY : gtest/fast
 
 #=============================================================================
+# Target rules for targets named webcam_topic_publish
+
+# Build rule for target.
+webcam_topic_publish: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 webcam_topic_publish
+.PHONY : webcam_topic_publish
+
+# fast build rule for target.
+webcam_topic_publish/fast:
+	$(MAKE) -f pose_estimation/CMakeFiles/webcam_topic_publish.dir/build.make pose_estimation/CMakeFiles/webcam_topic_publish.dir/build
+.PHONY : webcam_topic_publish/fast
+
+#=============================================================================
 # Target rules for targets named pose_estimation_genpy
 
 # Build rule for target.
@@ -1489,6 +1502,7 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... webcam_topic_publish"
 	@echo "... pose_estimation_genpy"
 	@echo "... pose_estimation_generate_messages_py"
 	@echo "... pose_estimation_gennodejs"
