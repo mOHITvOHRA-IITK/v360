@@ -6,11 +6,11 @@ upper_legs_part = [128,0,128]
 torse_part = [0,128,0]
 
 
-front_image_real_path = '/home/mohit/Self-Correction-Human-Parsing-master/input/23.png'
-side_image_real_path = '/home/mohit/Self-Correction-Human-Parsing-master/input/24.png'
+front_image_real_path = '/home/mohit/Self-Correction-Human-Parsing-master/input/21.png'
+side_image_real_path = '/home/mohit/Self-Correction-Human-Parsing-master/input/22.png'
 
-front_image_human_part_seg_path = '/home/mohit/Self-Correction-Human-Parsing-master/output/23.png'
-side_image_human_part_seg_path = '/home/mohit/Self-Correction-Human-Parsing-master/output/24.png'
+front_image_human_part_seg_path = '/home/mohit/Self-Correction-Human-Parsing-master/output/21.png'
+side_image_human_part_seg_path = '/home/mohit/Self-Correction-Human-Parsing-master/output/22.png'
 
 
 i1 = cv2.imread(front_image_real_path)
@@ -21,7 +21,7 @@ m2 = cv2.imread(side_image_human_part_seg_path)
 
 
 
-actual_height = 168 # in cm, (1 inch = 2.54 cm)
+actual_height = 66*2.54 # in cm, (1 inch = 2.54 cm)
 
 front_waist_width, front_person_height = get_person_front_measurements(i1, m1)
 side_waist_width, side_person_height = get_person_side_measurements(i2, m2)
@@ -32,11 +32,11 @@ print ('side', side_waist_width, side_person_height)
 
 cm_per_pixel = actual_height / front_person_height
 front_waist_in_cm = cm_per_pixel*front_waist_width
-print ('front_waist_in_cm', front_waist_in_cm, front_waist_in_cm/2.54)
+print ('front_waist_in_cm', front_waist_in_cm, ' and in inches ', front_waist_in_cm/2.54)
 
 cm_per_pixel = actual_height / side_person_height
 side_waist_in_cm = cm_per_pixel*side_waist_width
-print ('side_waist_in_cm', side_waist_in_cm, side_waist_in_cm/2.54)
+print ('side_waist_in_cm', side_waist_in_cm, ' and in inches ', side_waist_in_cm/2.54)
 
 r1 = front_waist_in_cm/2
 r2 = side_waist_in_cm/2

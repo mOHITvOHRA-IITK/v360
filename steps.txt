@@ -1,0 +1,12 @@
+conda deactivate
+cd ~/Neural_Network_based_background_subtraction
+python main.py
+
+
+conda activate schp
+cd ~/Self-Correction-Human-Parsing-master
+python simple_extractor.py --dataset 'pascal' --model-restore 'exp-schp-201908270938-pascal-person-part.pth' --input-dir 'input' --output-dir 'output'
+
+conda activate schp
+cd ~/v360_ws/src/pose_estimation/scripts
+python get_waist_pixels.py
