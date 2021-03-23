@@ -12,7 +12,7 @@ import networks
 from utils.transforms import transform_logits
 from datasets.simple_extractor_dataset import SimpleFolderDataset
 
-
+from functions import *
 
 
 
@@ -106,7 +106,6 @@ class vision_demo_class:
 	def __init__(self, image_timer_value):
 
 
-
 		self.cap = cv2.VideoCapture(0)
 		if not self.cap.isOpened():
 		    raise IOError("Cannot open webcam")
@@ -119,23 +118,63 @@ class vision_demo_class:
 		_, frame = self.cap.read()
 		self.image_height, self.image_width, layers = frame.shape
 
-		self.exit_point = np.array([np.int(0.15*self.image_width), np.int(0.15*self.image_height)], dtype=int)
-		self.save_point = np.array([np.int(0.38*self.image_width), np.int(0.15*self.image_height)], dtype=int)
-		self.info_point = np.array([np.int(0.62*self.image_width), np.int(0.15*self.image_height)], dtype=int)
-		self.process_point = np.array([np.int(0.85*self.image_width), np.int(0.15*self.image_height)], dtype=int)
-
-		self.exit_button = False
-		self.save_button = False
-		self.info_button = False
-		self.process_button = False
-		
+				
 		self.current_img_timer = 0
 		self.img_timer_flag = False
 		self.image_timer_value = image_timer_value
-		
 
-		cv2.namedWindow('Human_measurement')
-		cv2.setMouseCallback('Human_measurement', get_mouse_click)		
+
+
+		###########################################################
+		################# Buttons for first screen ################
+		###########################################################
+		self.exit_point = np.array([np.int(0.15*self.image_width), np.int(0.15*self.image_height)], dtype=int)
+		self.fit_point = np.array([np.int(0.5*self.image_width), np.int(0.15*self.image_height)], dtype=int)
+		self.setting_point = np.array([np.int(0.85*self.image_width), np.int(0.15*self.image_height)], dtype=int)
+		self.help_point = np.array([np.int(0.15*self.image_width), np.int(0.85*self.image_height)], dtype=int)
+
+		self.exit_button = False
+		self.fit_button = False
+		self.setting_button = False
+		self.help_button = False
+
+
+		###########################################################
+		####################### Return button #####################
+		###########################################################
+		self.return_point = np.array([np.int(0.85*self.image_width), np.int(0.85*self.image_height)], dtype=int)
+
+
+		###########################################################
+		################ Buttons for Setting screen ###############
+		###########################################################
+		self.save_point = np.array([np.int(0.15*self.image_width), np.int(0.15*self.image_height)], dtype=int)
+		self.height_point = np.array([np.int(0.5*self.image_width), np.int(0.15*self.image_height)], dtype=int)
+		self.process_point = np.array([np.int(0.85*self.image_width), np.int(0.15*self.image_height)], dtype=int)
+
+		self.save_button = False
+		self.height_button = False
+		self.process_button = False
+
+
+		###########################################################
+		################# Buttons for Height screen ###############
+		###########################################################
+		self.feet_increment = np.array([np.int(0.43*self.image_width), np.int(0.25*self.image_height)], dtype=int)
+		self.feet = np.array([np.int(0.43*self.image_width), np.int(0.45*self.image_height)], dtype=int)
+		self.feet_decrement = np.array([np.int(0.43*self.image_width), np.int(0.65*self.image_height)], dtype=int)
+
+		self.inch_increment = np.array([np.int(0.57*self.image_width), np.int(0.25*self.image_height)], dtype=int)
+		self.inch = np.array([np.int(0.57*self.image_width), np.int(0.45*self.image_height)], dtype=int)
+		self.inch_decrement = np.array([np.int(0.57*self.image_width), np.int(0.65*self.image_height)], dtype=int)
+
+
+		self.height_feet = 0
+		self.height_inch = 0
+
+		
+		cv2.namedWindow('Visual_Try_ON')
+		cv2.setMouseCallback('Visual_Try_ON', get_mouse_click)		
 
 	
 	
@@ -156,7 +195,7 @@ class vision_demo_class:
 	
 		self.fps = cv2.getTickFrequency() / (cv2.getTickCount() - self.timer)        # fps calculation with timer start in function get_current_frame.
 		# self.current_frame = write_data(self.current_frame, 'fps:' + str(int(self.fps)), 0.05, 0.74, 0.17, 0.10, 0.01, 0.07, 1, 2, (255, 0, 255))
-		cv2.imshow('Human_measurement', self.current_frame)
+		cv2.imshow('Visual_Try_ON', self.current_frame)
 		cv2.waitKey(1)
 
 
@@ -189,56 +228,6 @@ class vision_demo_class:
 
 
 
-	def contactless_GUI(self):
-
-		self.get_current_frame()
-
-
-		if ( (self.exit_button == False and self.save_button == False) and (self.info_button == False and self.process_button == False) ):
-			self.buttons(self.exit_point, (0, 0,255), 'Ext', (255, 255, 255))
-			self.exit_button = self.button_selected(self.exit_point)
-
-			self.buttons(self.save_point, (255, 0, 0), 'Sav', (255, 255, 255))
-			self.save_button = self.button_selected(self.save_point)
-
-			self.buttons(self.info_point, (255, 0, 0), 'Inf', (255, 255, 255))
-			self.info_button = self.button_selected(self.info_point)
-
-			self.buttons(self.process_point, (255, 0, 0), 'Prc', (255, 255, 255))
-			self.process_button = self.button_selected(self.process_point)
-
-		else:
-			if self.exit_button:
-				print()
-				print (colored("********************************", 'cyan'))
-				print (colored("You have touched the exit button", 'red'))
-				print (colored("********************************", 'cyan'))
-				self.cap.release()
-				cv2.destroyAllWindows()
-				exit()
-
-
-			if self.save_button:
-				self.buttons(self.save_point, (0, 255, 0), 'Sav', (255, 255, 255))
-				self.save_img()
-
-
-			if self.info_button:
-				self.buttons(self.info_point, (0, 255, 0), ' <', (255, 255, 255))
-				self.Print_info()
-
-
-			if self.process_button:
-				self.buttons(self.process_point, (0, 255, 0), 'Prc', (255, 255, 255))
-				self.Process_image()
-
-
-
-
-		self.view_frame()
-
-
-
 	def save_img(self):
 
 
@@ -258,7 +247,8 @@ class vision_demo_class:
 			if count_down == 0:
 				if img_num == 0:
 					cv2.imwrite(images_folder_path + '/front.png', self.current_frame2)
-					os.remove(images_folder_path + '/side.png')
+					if os.path.isfile(images_folder_path + '/side.png'):
+						os.remove(images_folder_path + '/side.png')
 				else:
 					cv2.imwrite(images_folder_path + '/side.png', self.current_frame2)
 				self.img_timer_flag = False
@@ -266,50 +256,259 @@ class vision_demo_class:
 
 
 
-	def Print_info(self):
-		self.current_frame = write_data(self.current_frame, 'Store front and side face images', 0.0, 0.25, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
-		self.current_frame = write_data(self.current_frame, 'For Front, stand in T pose', 0.0, 0.4, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
-		self.current_frame = write_data(self.current_frame, 'For side, rotate about 90 in T pose', 0.0, 0.55, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
-		self.current_frame = write_data(self.current_frame, 'Sav button saves single images', 0.0, 0.7, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
-		self.current_frame = write_data(self.current_frame, 'Prc processes the saved images', 0.0, 0.85, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
-
-		local_info_button = self.button_selected(self.info_point)
-		if local_info_button == True:
-			self.info_button = False
+		local_save_button = self.button_selected(self.return_point)
+		if local_save_button == True:
+			self.save_button = False
+			self.img_timer_flag = False
 
 
 
 	def Process_image(self):
 
-		input_size = [512, 512]
-		transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=[0.406, 0.456, 0.485], std=[0.225, 0.224, 0.229])])
-		dataset = SimpleFolderDataset(root=images_folder_path, input_size=input_size, transform=transform)
-		dataloader = DataLoader(dataset)
+		if ( (os.path.isfile(images_folder_path + '/front.png')) & (os.path.isfile(images_folder_path + '/side.png')) ):
 
-		palette = get_palette(7)
+			input_size = [512, 512]
+			transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=[0.406, 0.456, 0.485], std=[0.225, 0.224, 0.229])])
+			dataset = SimpleFolderDataset(root=images_folder_path, input_size=input_size, transform=transform)
+			dataloader = DataLoader(dataset)
 
-		with torch.no_grad():
-			for idx, batch in enumerate(tqdm(dataloader)):
-				image, meta = batch
-				img_name = meta['name'][0]
-				c = meta['center'].numpy()[0]
-				s = meta['scale'].numpy()[0]
-				w = meta['width'].numpy()[0]
-				h = meta['height'].numpy()[0]
+			palette = get_palette(7)
 
-				output = model(image.cuda())
-				upsample = torch.nn.Upsample(size=input_size, mode='bilinear', align_corners=True)
-				upsample_output = upsample(output[0][-1][0].unsqueeze(0))
-				upsample_output = upsample_output.squeeze()
-				upsample_output = upsample_output.permute(1, 2, 0)  # CHW -> HWC
+			with torch.no_grad():
+				for idx, batch in enumerate(tqdm(dataloader)):
+					image, meta = batch
+					img_name = meta['name'][0]
+					c = meta['center'].numpy()[0]
+					s = meta['scale'].numpy()[0]
+					w = meta['width'].numpy()[0]
+					h = meta['height'].numpy()[0]
 
-				logits_result = transform_logits(upsample_output.data.cpu().numpy(), c, s, w, h, input_size=input_size)
-				parsing_result = np.argmax(logits_result, axis=2)
-				parsing_result_path = os.path.join(output_path, img_name[:-4] + '.png')
-				output_img = Image.fromarray(np.asarray(parsing_result, dtype=np.uint8))
-				output_img.putpalette(palette)
-				output_img.save(parsing_result_path)
+					output = model(image.cuda())
+					upsample = torch.nn.Upsample(size=input_size, mode='bilinear', align_corners=True)
+					upsample_output = upsample(output[0][-1][0].unsqueeze(0))
+					upsample_output = upsample_output.squeeze()
+					upsample_output = upsample_output.permute(1, 2, 0)  # CHW -> HWC
+
+					logits_result = transform_logits(upsample_output.data.cpu().numpy(), c, s, w, h, input_size=input_size)
+					parsing_result = np.argmax(logits_result, axis=2)
+					parsing_result_path = os.path.join(output_path, img_name[:-4] + '.png')
+					output_img = Image.fromarray(np.asarray(parsing_result, dtype=np.uint8))
+					output_img.putpalette(palette)
+					output_img.save(parsing_result_path)
 			
+			self.process_button = False
+			
+			actual_height = (12*self.height_feet + self.height_inch)*2.54 # in cm, (1 inch = 2.54 cm)
+
+			front_waist_width, front_person_height = self.get_front_waist_to_height_ratio()
+			side_waist_width, side_person_height = self.get_side_waist_to_height_ratio()
+			cm_per_pixel = actual_height / front_person_height
+			front_waist_in_cm = cm_per_pixel*front_waist_width
+			print ('front_waist_in_cm', front_waist_in_cm, ' and in inches ', front_waist_in_cm/2.54)
+
+			cm_per_pixel = actual_height / side_person_height
+			side_waist_in_cm = cm_per_pixel*side_waist_width
+			print ('side_waist_in_cm', side_waist_in_cm, ' and in inches ', side_waist_in_cm/2.54)
+
+			r1 = front_waist_in_cm/2
+			r2 = side_waist_in_cm/2
+
+			waist = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
+			print ('waist (cm)', waist)
+			waist = waist/2.54
+			print ('waist (inches)', waist)
+
+		else:
+			if self.img_timer_flag == False:
+				self.current_img_timer = time.time()
+				self.img_timer_flag = True
+
+
+			count_down = self.image_timer_value - np.int( time.time() - self.current_img_timer)
+		
+			if ( self.img_timer_flag and count_down <= self.image_timer_value):
+				self.current_frame = write_data(self.current_frame, 'Please save some images', 0.0, 0.4, 1.0, 0.15, 0.18, 0.10, 1, 2, (255,255,255))
+
+			
+			if count_down == 0 or self.button_selected(self.return_point):
+				self.process_button = False
+				self.img_timer_flag = False
+
+
+
+
+	def get_front_waist_to_height_ratio(self):
+		image_path = images_folder_path + '/front.png'
+		human_part_seg_path = output_path + '/front.png'
+
+		image = cv2.imread(image_path)
+		mask = cv2.imread(human_part_seg_path)
+
+		waist_width, person_height = get_person_front_measurements(image, mask, visualize=True)
+
+		return waist_width, person_height
+
+
+
+	def get_side_waist_to_height_ratio(self):
+		image_path = images_folder_path + '/side.png'
+		human_part_seg_path = output_path + '/side.png'
+
+		image = cv2.imread(image_path)
+		mask = cv2.imread(human_part_seg_path)
+
+		waist_width, person_height = get_person_side_measurements(image, mask, visualize=True)
+
+		return waist_width, person_height
+
+
+
+	def first_screen(self):
+
+		self.get_current_frame()
+
+
+		if ( (self.exit_button == False) and (self.fit_button == False) and (self.setting_button == False) and (self.help_button == False) ):
+			self.buttons(self.exit_point, (0, 0, 255), 'Ext', (255, 255, 255))
+			self.exit_button = self.button_selected(self.exit_point)
+
+			self.buttons(self.fit_point, (255, 0, 0), 'Fit', (255, 255, 255))
+			self.fit_button = self.button_selected(self.fit_point)
+
+			self.buttons(self.setting_point, (255, 0, 0), 'Set', (255, 255, 255))
+			self.setting_button = self.button_selected(self.setting_point)
+
+			self.buttons(self.help_point, (255, 0, 0), ' ?', (255, 255, 255))
+			self.help_button = self.button_selected(self.help_point)
+
+
+		else:
+			if self.exit_button:
+				print()
+				print (colored("********************************", 'cyan'))
+				print (colored("You have touched the exit button", 'red'))
+				print (colored("********************************", 'cyan'))
+				self.cap.release()
+				cv2.destroyAllWindows()
+				exit()
+
+
+			if self.help_button:
+				self.buttons(self.return_point, (255, 0, 0), '<', (255, 255, 255))
+				self.help_screen()
+
+
+			if self.fit_button:
+				self.buttons(self.return_point, (255, 0, 0), '<', (255, 255, 255))
+				self.fitting_screen()
+
+
+			if self.setting_button:
+				self.buttons(self.return_point, (255, 0, 0), '<', (255, 255, 255))
+				self.setting_screen()
+
+
+
+		self.view_frame()
+
+
+
+	def fitting_screen(self):
+		self.current_frame = write_data(self.current_frame, 'In development phase', 0.0, 0.4, 1.0, 0.15, 0.2, 0.1, 1, 2, (255,255,255))
+		local_fit_button = self.button_selected(self.return_point)
+		if local_fit_button == True:
+			self.fit_button = False
+
+
+
+	def help_screen(self):
+		self.current_frame = write_data(self.current_frame, 'Store front and side face images', 0.0, 0.0, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
+		self.current_frame = write_data(self.current_frame, 'For Front, stand in T pose', 0.0, 0.15, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
+		self.current_frame = write_data(self.current_frame, 'For side, rotate about 90 in T pose', 0.0, 0.30, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
+		self.current_frame = write_data(self.current_frame, 'Sav button saves single images', 0.0, 0.45, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
+		self.current_frame = write_data(self.current_frame, 'Prc processes the saved images', 0.0, 0.6, 1.0, 0.15, 0.04, 0.12, 1, 2, (255,255,255))
+
+		local_help_button = self.button_selected(self.return_point)
+		if local_help_button == True:
+			self.help_button = False
+
+
+
+	def setting_screen(self):
+
+		if ( (self.save_button == False) and (self.height_button == False) and (self.process_button == False) ):
+			self.buttons(self.save_point, (255, 0, 0), 'Sav', (255, 255, 255))
+			self.save_button = self.button_selected(self.save_point)
+
+			self.buttons(self.height_point, (255, 0, 0), 'Hit', (255, 255, 255))
+			self.height_button = self.button_selected(self.height_point)
+
+			self.buttons(self.process_point, (255, 0, 0), 'Prc', (255, 255, 255))
+			self.process_button = self.button_selected(self.process_point)
+
+
+		else:
+			
+			if self.save_button:
+				self.save_img()
+
+
+			if self.height_button:
+				self.buttons(self.return_point, (255, 0, 0), '<', (255, 255, 255))
+				self.height_screen()
+
+
+			if self.process_button:
+				self.Process_image()
+
+
+
+		local_setting_button = self.button_selected(self.return_point)
+		if local_setting_button == True:
+			self.setting_button = False
+
+
+
+	def height_screen(self):
+		# self.current_frame = write_data(self.current_frame, 'In development phase', 0.0, 0.4, 1.0, 0.15, 0.2, 0.1, 1, 2, (255,255,255))
+		local_height_button = self.button_selected(self.return_point)
+		if local_height_button == True:
+			self.height_button = False
+
+
+
+		self.buttons(self.feet_increment, (255, 0, 0), ' +', (255, 255, 255))
+		self.buttons(self.feet, (255, 0, 0), ' ' + str(self.height_feet) + '\'', (255, 255, 255))		
+		self.buttons(self.feet_decrement, (255, 0, 0), ' -', (255, 255, 255))
+
+		self.buttons(self.inch_increment, (255, 0, 0), ' +', (255, 255, 255))
+		self.buttons(self.inch, (255, 0, 0), str(self.height_inch).zfill(2) + '\"', (255, 255, 255))		
+		self.buttons(self.inch_decrement, (255, 0, 0), ' -', (255, 255, 255))
+
+
+		local_feet_increment = self.button_selected(self.feet_increment)
+		if local_feet_increment:
+			self.height_feet += 1
+
+
+		local_feet_decrement = self.button_selected(self.feet_decrement)
+		if local_feet_decrement:
+			self.height_feet -= 1
+			if self.height_feet < 0:
+				self.height_feet = 0
+
+
+		local_inch_increment = self.button_selected(self.inch_increment)
+		if local_inch_increment:
+			self.height_inch += 1
+			self.height_inch %= 12
+
+
+		local_inch_decrement = self.button_selected(self.inch_decrement)
+		if local_inch_decrement:
+			self.height_inch -= 1
+			if self.height_inch < 0:
+				self.height_inch = 0
 
 		
-		self.process_button = False
+

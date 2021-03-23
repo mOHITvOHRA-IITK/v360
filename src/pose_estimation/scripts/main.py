@@ -10,4 +10,5 @@ args = parser.parse_args()
 o = vision_demo_class(args.image_timer_val)
 
 while True:
-	o.contactless_GUI()
+	# o.contactless_GUI()
+	o.first_screen()
