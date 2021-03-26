@@ -300,29 +300,51 @@ class vision_demo_class:
 			
 			actual_height = (12*self.height_feet + self.height_inch)*2.54 # in cm, (1 inch = 2.54 cm)
 
-			front_waist_width, front_person_height = self.get_front_waist_to_height_ratio()
-			side_waist_width, side_person_height = self.get_side_waist_to_height_ratio()
-			cm_per_pixel = actual_height / front_person_height
-			front_waist_in_cm = cm_per_pixel*front_waist_width
-			print ('front_waist_in_cm', front_waist_in_cm, ' and in inches ', front_waist_in_cm/2.54)
+			f_path = images_folder_path + '/front.png'
+			human_part_seg_f_path = output_path + '/front.png'
+			f_image = cv2.imread(f_path)
+			f_mask = cv2.imread(human_part_seg_f_path)
 
-			cm_per_pixel = actual_height / side_person_height
-			side_waist_in_cm = cm_per_pixel*side_waist_width
-			print ('side_waist_in_cm', side_waist_in_cm, ' and in inches ', side_waist_in_cm/2.54)
+			s_path = images_folder_path + '/side.png'
+			human_part_seg_s_path = output_path + '/side.png'
+			s_image = cv2.imread(s_path)
+			s_mask = cv2.imread(human_part_seg_s_path)
+			get_measuremnets(f_image, f_mask, s_image, s_mask, True)
 
-			r1 = front_waist_in_cm/2
-			r2 = side_waist_in_cm/2
+			# front_waist_width, front_chest_width, front_person_height = self.get_front_measurements()
+			# side_waist_width, side_chest_width, side_person_height = self.get_side_measurements()
+			
+			# cm_per_pixel = actual_height / front_person_height
+			# front_waist_in_cm = front_waist_width*cm_per_pixel
+			# front_chest_in_cm = front_chest_width*cm_per_pixel
 
-			waist = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
-			print ('waist (cm)', waist)
-			waist = waist/2.54
-			print ('waist (inches)', waist)
+
+
+			# cm_per_pixel = actual_height / side_person_height
+			# side_waist_in_cm = side_waist_width*cm_per_pixel
+			# side_chest_in_cm = side_chest_width*cm_per_pixel
+
+
+			# print ('front_waist_in_cm', front_waist_in_cm, ' and in inches ', front_waist_in_cm/2.54)
+			# print ('side_waist_in_cm', side_waist_in_cm, ' and in inches ', side_waist_in_cm/2.54)
+			# r1 = front_waist_in_cm/2
+			# r2 = side_waist_in_cm/2
+			# waist = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
+			# print ('waist_in_cm', waist, ' and in inches ', waist/2.54)
+
+
+
+			# print ('front_chest_in_cm', front_chest_in_cm, ' and in inches ', front_chest_in_cm/2.54)
+			# print ('side_chest_in_cm', side_chest_in_cm, ' and in inches ', side_chest_in_cm/2.54)
+			# r1 = front_chest_in_cm/2
+			# r2 = side_chest_in_cm/2
+			# chest = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
+			# print ('chest_in_cm', chest, ' and in inches ', chest/2.54)
 
 		else:
 			if self.img_timer_flag == False:
 				self.current_img_timer = time.time()
 				self.img_timer_flag = True
-
 
 			count_down = self.image_timer_value - np.int( time.time() - self.current_img_timer)
 		
@@ -337,29 +359,29 @@ class vision_demo_class:
 
 
 
-	def get_front_waist_to_height_ratio(self):
+	def get_front_measurements(self):
 		image_path = images_folder_path + '/front.png'
 		human_part_seg_path = output_path + '/front.png'
 
 		image = cv2.imread(image_path)
 		mask = cv2.imread(human_part_seg_path)
 
-		waist_width, person_height = get_person_front_measurements(image, mask, visualize=True)
+		waist_width, chest_width, person_height = get_front_chest_and_waist(image, mask, visualize=True)
 
-		return waist_width, person_height
+		return waist_width, chest_width, person_height
 
 
 
-	def get_side_waist_to_height_ratio(self):
+	def get_side_measurements(self):
 		image_path = images_folder_path + '/side.png'
 		human_part_seg_path = output_path + '/side.png'
 
 		image = cv2.imread(image_path)
 		mask = cv2.imread(human_part_seg_path)
 
-		waist_width, person_height = get_person_side_measurements(image, mask, visualize=True)
+		waist_width, chest_width, person_height = get_side_chest_and_waist(image, mask, visualize=True)
 
-		return waist_width, person_height
+		return waist_width, chest_width, person_height
 
 
 
