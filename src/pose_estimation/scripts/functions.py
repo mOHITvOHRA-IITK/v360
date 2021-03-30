@@ -248,29 +248,29 @@ def get_front_chest_and_waist(image, mask, visualize=False):
 
 	person_bbox = get_person_bounding_box(mask)
 
+	p1 = (waist_bbox[0], np.int(waist_bbox[1] + waist_bbox[3]/2))
+	p2 = (waist_bbox[0] + waist_bbox[2], np.int(waist_bbox[1] + waist_bbox[3]/2))
+	cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
+	cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
+
+
+	p1 = (chest_bbox[0], np.int(chest_bbox[1] + chest_bbox[3]/2))
+	p2 = (chest_bbox[0] + chest_bbox[2], np.int(chest_bbox[1] + chest_bbox[3]/2))
+	cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
+	cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
+
+
+	p1 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), person_bbox[1])
+	p2 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), np.int(person_bbox[1] + person_bbox[3]))
+	cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
+	cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
+
 
 	if visualize==True:
-		p1 = (waist_bbox[0], np.int(waist_bbox[1] + waist_bbox[3]/2))
-		p2 = (waist_bbox[0] + waist_bbox[2], np.int(waist_bbox[1] + waist_bbox[3]/2))
-		cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
-		cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
-
-
-		p1 = (chest_bbox[0], np.int(chest_bbox[1] + chest_bbox[3]/2))
-		p2 = (chest_bbox[0] + chest_bbox[2], np.int(chest_bbox[1] + chest_bbox[3]/2))
-		cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
-		cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
-
-
-		p1 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), person_bbox[1])
-		p2 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), np.int(person_bbox[1] + person_bbox[3]))
-		cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
-		cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
-
 		cv2.imshow('front', image)
 		cv2.waitKey(1)
 
-	return waist_bbox[2], chest_bbox[2], person_bbox[3]
+	return image, waist_bbox[2], chest_bbox[2], person_bbox[3]
 
 
 
@@ -283,29 +283,30 @@ def get_side_chest_and_waist(image, mask, visualize=False):
 
 	person_bbox = get_person_bounding_box(mask)
 
+	p1 = (waist_bbox[0], np.int(waist_bbox[1] + waist_bbox[3]/2))
+	p2 = (waist_bbox[0] + waist_bbox[2], np.int(waist_bbox[1] + waist_bbox[3]/2))
+	cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
+	cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
+
+
+	p1 = (chest_bbox[0], np.int(chest_bbox[1] + chest_bbox[3]/2))
+	p2 = (chest_bbox[0] + chest_bbox[2], np.int(chest_bbox[1] + chest_bbox[3]/2))
+	cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
+	cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
+
+
+	p1 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), person_bbox[1])
+	p2 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), np.int(person_bbox[1] + person_bbox[3]))
+	cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
+	cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
+
 
 	if visualize==True:
-		p1 = (waist_bbox[0], np.int(waist_bbox[1] + waist_bbox[3]/2))
-		p2 = (waist_bbox[0] + waist_bbox[2], np.int(waist_bbox[1] + waist_bbox[3]/2))
-		cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
-		cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
-
-
-		p1 = (chest_bbox[0], np.int(chest_bbox[1] + chest_bbox[3]/2))
-		p2 = (chest_bbox[0] + chest_bbox[2], np.int(chest_bbox[1] + chest_bbox[3]/2))
-		cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
-		cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
-
-
-		p1 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), person_bbox[1])
-		p2 = (np.int(person_bbox[0] + 1.1*person_bbox[2]), np.int(person_bbox[1] + person_bbox[3]))
-		cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
-		cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
-
+		
 		cv2.imshow('side', image)
 		cv2.waitKey(1)
 
-	return waist_bbox[2], chest_bbox[2], person_bbox[3]
+	return image, waist_bbox[2], chest_bbox[2], person_bbox[3]
 
 
 
@@ -326,84 +327,18 @@ def get_human_head_torse_fraction_of_actual_height(image, mask):
 
 	part_bbox = get_part_bounding_box(head_torse_array)
 
-	p1 = (np.int(part_bbox[0] + 1.1*part_bbox[2]), part_bbox[1])
-	p2 = (np.int(part_bbox[0] + 1.1*part_bbox[2]), np.int(part_bbox[1] + part_bbox[3]))
-	cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
-	cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
 
-	cv2.imshow('image', image)
+	# p1 = (np.int(part_bbox[0] + part_bbox[2]), part_bbox[1])
+	# p2 = (np.int(part_bbox[0] + part_bbox[2]), np.int(part_bbox[1] + part_bbox[3]))
+	# cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
+	# cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
+	# cv2.imshow('image', image)
 
 	return person_bbox[3], part_bbox[3]
 
 	
 
-
-def fit_rotated_rectangle_on_lower_leg(image, mask):
-
-	mask_array = np.array(mask, np.uint8)
-	lower_legs_array = 0*mask_array
-
-	x = (mask_array[:,:,0] == lower_legs_part[0]) & (mask_array[:,:,1] == lower_legs_part[1]) & (mask_array[:,:,2] == lower_legs_part[2])
-	lower_legs_array[x, :] = [255, 255, 255]
-
-
-	part_bbox = get_person_bounding_box(lower_legs_array)
-	part_bbox = [part_bbox[0], part_bbox[1], part_bbox[2], np.int(part_bbox[3]/2)]
-	lower_legs_rec_array = 0*mask_array
-	cv2.rectangle(lower_legs_rec_array, (part_bbox[0], part_bbox[1]), (part_bbox[0] + part_bbox[2], part_bbox[1] + part_bbox[3]), (255,255,255), -1)
-	
-	final_lower_leg_mask = np.zeros(mask.shape[0:2], np.uint8)
-	x = (mask_array[:,:,0] == lower_legs_part[0]) & (mask_array[:,:,1] == lower_legs_part[1]) & (mask_array[:,:,2] == lower_legs_part[2]) & (lower_legs_rec_array[:,:,0] == 255) & (lower_legs_rec_array[:,:,1] == 255) & (lower_legs_rec_array[:,:,2] == 255)
-	final_lower_leg_mask[x] = [255]
-	
-
-	(major, minor, _) = cv2.__version__.split(".")
-	if (np.int(major) >= 4):
-		contours, _ = cv2.findContours(final_lower_leg_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-	else:
-		_, contours, _ = cv2.findContours(final_lower_leg_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-	num_pts = 0
-	index = -1
-	for j in range(len(contours)):
-		pts = cv2.contourArea(contours[j])
-		if pts > num_pts:
-			index = j
-			num_pts = pts
-
-	if index > -1:
-		minAreaRect = cv2.minAreaRect(contours[index])
-
-		bounding_box_centre = (minAreaRect[0][0], minAreaRect[0][1])
-		bounding_box_dimensions = (minAreaRect[1][0], minAreaRect[1][1])
-		# bounding_box_dimensions = (0, minAreaRect[1][1])
-		bbox_angle = minAreaRect[2]
-		# if bbox_angle < 0:
-		# 	bbox_angle -=-90
-		# else:
-		# 	bbox_angle += 90
-
-		minAreaRect = (bounding_box_centre, bounding_box_dimensions, bbox_angle)
-
-		box = cv2.boxPoints(minAreaRect)
-		box = np.int0(box)
-		cv2.drawContours(image, [box], 0, (0,255,0), 2)
-
-	cv2.imshow('final_lower_leg_mask', final_lower_leg_mask)
-
-	p1 = (np.int(part_bbox[0] + 1.1*part_bbox[2]), part_bbox[1])
-	p2 = (np.int(part_bbox[0] + 1.1*part_bbox[2]), np.int(part_bbox[1] + part_bbox[3]))
-	cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
-	cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
-
-	cv2.imshow('image', image)
-
-
-
-
 def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualize=False):
-
-	mask = remove_unwanted_person_seg(mask)
 
 	mask_array = np.array(mask, np.uint8)
 	upper_legs_array = 0*mask_array
@@ -419,6 +354,7 @@ def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualiz
 	part_bbox = get_person_bounding_box(upper_legs_array)
 
 	new_part_bbox = list(part_bbox)
+	centroid_point = []
 	while(1):
 		new_part_bbox[1] += 1
 		new_part_bbox[3] -= 1
@@ -440,12 +376,23 @@ def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualiz
 			new_part_bbox[1] += 2
 			break
 
+		
+
 
 	cropped_upper_legs_array = 0*mask_array
 	cv2.rectangle(cropped_upper_legs_array, (new_part_bbox[0], new_part_bbox[1]), (new_part_bbox[0] + new_part_bbox[2], new_part_bbox[1] + np.int(1.0*new_part_bbox[3])), (255,255,255), -1)
 	x = (upper_legs_array[:,:,0] == 255) & (cropped_upper_legs_array[:,:,0] == 255)
 	cropped_upper_legs_array = 0*mask_array
 	cropped_upper_legs_array[x, :] = [255, 255, 255]
+
+
+	cropped = 0*mask_array
+	cv2.rectangle(cropped, (part_bbox[0], part_bbox[1]), (part_bbox[0] + part_bbox[2], part_bbox[1] + np.int(1.0*part_bbox[3] - new_part_bbox[3])), (255,255,255), -1)
+	x = (upper_legs_array[:,:,0] == 255) & (cropped[:,:,0] == 255)
+	cropped = 0*mask_array
+	cropped[x, :] = [255, 255, 255]
+	pixel_loc = np.where(cropped[:,:,0] > 0)
+	centroid_point = ( np.int(np.mean(pixel_loc[0])), np.int(np.mean(pixel_loc[1])) )
 
 
 	(major, minor, _) = cv2.__version__.split(".")
@@ -544,9 +491,6 @@ def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualiz
 
 		final_pixel_loc = (pixel_loc[0][f_dis_index], pixel_loc[1][f_dis_index])
 		start_pixel_loc = (pixel_loc[0][s_dis_index], pixel_loc[1][s_dis_index])
-
-
-		
 
 		upper_legs_array [final_pixel_loc[0], final_pixel_loc[1],:] = [0,255,0]
 		upper_legs_array [start_pixel_loc[0], start_pixel_loc[1],:] = [0,0,255]
@@ -671,27 +615,37 @@ def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualiz
 
 
 
-		upper_legs_only_array [final_pixel_loc[0], final_pixel_loc[1],:] = [0,255,0]
-		upper_legs_only_array [start_pixel_loc[0], start_pixel_loc[1],:] = [0,0,255]
-		upper_legs_only_array [mid_pixel_loc[0], mid_pixel_loc[1],:] = [255,0,0]
-		upper_legs_only_array [forth_pixel_loc[0], forth_pixel_loc[1],:] = [255,0,255]
+		centroid_start_dis = np.sqrt( (centroid_point[0] - start_pixel_loc[0])*(centroid_point[0] - start_pixel_loc[0]) + (centroid_point[1] - start_pixel_loc[1])*(centroid_point[1] - start_pixel_loc[1]) )
+		centroid_final_dis = np.sqrt( (centroid_point[0] - final_pixel_loc[0])*(centroid_point[0] - final_pixel_loc[0]) + (centroid_point[1] - final_pixel_loc[1])*(centroid_point[1] - final_pixel_loc[1]) )
+
+		inner_thigh_point = start_pixel_loc
+		outer_thigh_point = final_pixel_loc
+
+		if centroid_final_dis < centroid_start_dis:
+			inner_thigh_point = final_pixel_loc
+			outer_thigh_point = start_pixel_loc
 
 
 		if visualize:
-			p1 = (final_pixel_loc[1], final_pixel_loc[0])
-			p2 = (start_pixel_loc[1], start_pixel_loc[0])
-			# cv2.arrowedLine(mask, p1, p2, (255,0,255), 2, tipLength = 0.03)
-			# cv2.arrowedLine(mask, p2, p1, (255,0,255), 2, tipLength = 0.03)
-			# cv2.imshow('mask', mask)
 
-			cv2.arrowedLine(image, p1, p2, (255,0,255), 2, tipLength = 0.03)
-			cv2.arrowedLine(image, p2, p1, (255,0,255), 2, tipLength = 0.03)
+			### To visualize centroid point
+			# p1 = (centroid_point[1], centroid_point[0])
+			# cv2.circle(image, p1, 10, (255,0,0), -1)
+
+			p1 = (inner_thigh_point[1], inner_thigh_point[0])
+			p2 = (outer_thigh_point[1], outer_thigh_point[0])
+
+			### To visualize inner_thigh_point
+			# cv2.circle(image, p1, 10, (0,255,0), -1)
+
+			### To visualize outer_thigh_point
+			# cv2.circle(image, p2, 10, (255,0,0), -1)
+
+			cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.1)
+			cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.1)
 			cv2.imshow('image', image)
 
 
-
-
-		
 
 		total_dis = np.sqrt((mid_pixel_loc[0] - forth_pixel_loc[0])*(mid_pixel_loc[0] - forth_pixel_loc[0]) + (mid_pixel_loc[1] - forth_pixel_loc[1])*(mid_pixel_loc[1] - forth_pixel_loc[1]))
 		mid_dis = np.sqrt((mid_pixel_loc[0] - final_pixel_loc[0])*(mid_pixel_loc[0] - final_pixel_loc[0]) + (mid_pixel_loc[1] - final_pixel_loc[1])*(mid_pixel_loc[1] - final_pixel_loc[1]))
@@ -726,36 +680,76 @@ def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualiz
 			p1 = (side_f_point[1], side_f_point[0])
 			p2 = (side_s_point[1], side_s_point[0])
 			
-
-			cv2.arrowedLine(side_image, p1, p2, (255,0,255), 2, tipLength = 0.03)
-			cv2.arrowedLine(side_image, p2, p1, (255,0,255), 2, tipLength = 0.03)
+			cv2.arrowedLine(side_image, p1, p2, (0,0,255), 2, tipLength = 0.1)
+			cv2.arrowedLine(side_image, p2, p1, (0,0,255), 2, tipLength = 0.1)
 			cv2.imshow('side_image', side_image)
 
 
+		return inner_thigh_point, outer_thigh_point, mid_pixel_loc, forth_pixel_loc, side_f_point, side_s_point, True
+
+
+	return 0,0,0,0,0,0,False
 
 
 
-def get_measuremnets(i1, m1, i2, m2, visualize=False):
-	get_front_chest_and_waist(i1, m1)
-	get_side_chest_and_waist(i1, m1)
-	fit_rotated_rectangle_on_thighs(i1, m1, i2, m2, visualize)
-
-
-			
-
-
-
-
-			
-
-			
-
-
+def get_measuremnets(i1, m1, i2, m2, actual_height, visualize=False):
+	m1 = remove_unwanted_person_seg(m1)
+	m2 = remove_unwanted_person_seg(m2)
 
 	
-	
+
+	# get side view full height and torse+head ratio
+	side_full_height_pixels, side_head_torse_height_pixels = get_human_head_torse_fraction_of_actual_height(i2, m2)
+
+	# calculate front view expected full heigt pixels using only head+torse pixels
+	real_front_height_pixels, front_head_torse_height_pixels = get_human_head_torse_fraction_of_actual_height(i1, m1)
+	front_full_height_pixels = front_head_torse_height_pixels *(side_full_height_pixels / side_head_torse_height_pixels)
+
+	# print ('real_front_height_pixels ', real_front_height_pixels)
+	# print ('calculated_front_height_pixels ', front_full_height_pixels)
+
+	i1, front_waist_dim, front_chest_dim, _ = get_front_chest_and_waist(i1, m1)
+	i2, side_waist_dim, side_chest_dim, _ = get_side_chest_and_waist(i2, m2)
+	i1, sleeve_start_pixel_loc, sleeve_final_pixel_loc = get_sleeve_points(i1, m1)
+	start_pixel_loc, final_pixel_loc, mid_pixel_loc, forth_pixel_loc, side_f_point, side_s_point, status = fit_rotated_rectangle_on_thighs(i1, m1, i2, m2, visualize)
+
+	if status == True:
+		side_cm_per_pixel = actual_height/side_full_height_pixels
+		front_cm_per_pixel = actual_height/front_full_height_pixels
+
+		side_waist_in_cm = side_waist_dim*side_cm_per_pixel
+		front_waist_in_cm = front_waist_dim*front_cm_per_pixel
+		r1 = front_waist_in_cm/2
+		r2 = side_waist_in_cm/2
+		waist = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
+		print ('waist_in_cm', waist, ' and in inches ', waist/2.54)
+
+		side_chest_in_cm = side_chest_dim*side_cm_per_pixel
+		front_chest_in_cm = front_chest_dim*front_cm_per_pixel
+		r1 = front_chest_in_cm/2
+		r2 = side_chest_in_cm/2
+		chest = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
+		print ('chest_in_cm', chest, ' and in inches ', chest/2.54)
 
 
+		side_thigh_dim = np.sqrt( (side_f_point[0] - side_s_point[0])*(side_f_point[0] - side_s_point[0]) + (side_f_point[1] - side_s_point[1])*(side_f_point[1] - side_s_point[1]))
+		front_thigh_dim = np.sqrt( (final_pixel_loc[0] - start_pixel_loc[0])*(final_pixel_loc[0] - start_pixel_loc[0]) + (final_pixel_loc[1] - start_pixel_loc[1])*(final_pixel_loc[1] - start_pixel_loc[1]))
+		side_thigh_in_cm = side_thigh_dim*side_cm_per_pixel
+		front_thigh_in_cm = front_thigh_dim*front_cm_per_pixel
+		r1 = front_thigh_in_cm/2
+		r2 = side_thigh_in_cm/2
+		thigh = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
+		print ('thigh_in_cm', thigh, ' and in inches ', thigh/2.54)
+
+		
+		front_sleeve_dim = np.sqrt( (sleeve_final_pixel_loc[0] - sleeve_start_pixel_loc[0])*(sleeve_final_pixel_loc[0] - sleeve_start_pixel_loc[0]) + (sleeve_final_pixel_loc[1] - sleeve_start_pixel_loc[1])*(sleeve_final_pixel_loc[1] - sleeve_start_pixel_loc[1]))
+		front_sleeve_in_cm = front_sleeve_dim*front_cm_per_pixel
+		print ('sleeve_in_cm', front_sleeve_in_cm, ' and in inches ', front_sleeve_in_cm/2.54)
+
+
+
+	else:
+		print ("need to get clear images, Can not find the dimensions")
 
 
 
@@ -800,8 +794,122 @@ def remove_unwanted_person_seg(mask, Visualize=False):
 
 
 
+def get_sleeve_points(image, mask):
+	mask_array = np.array(mask, np.uint8)
+	arm_array = 0*mask_array
+
+	x = (mask_array[:,:,0] == lower_arm_part[0]) & (mask_array[:,:,1] == lower_arm_part[1]) & (mask_array[:,:,2] == lower_arm_part[2])
+	y = (mask_array[:,:,0] == upper_arm_part[0]) & (mask_array[:,:,1] == upper_arm_part[1]) & (mask_array[:,:,2] == upper_arm_part[2])
+	arm_array[x, :] = [255, 255, 255]
+	arm_array[y, :] = [255, 255, 255]
+
+	part_bbox = get_person_bounding_box(arm_array)
+	new_part_bbox = list(part_bbox)
+	pixel_loc = np.where(arm_array > 0)
+
+	chest_mask = get_chest_pixels_mask(mask)
+	pixel_loc2 = np.where(chest_mask > 0)
+	
+	first_point = (new_part_bbox[0], new_part_bbox[1])
+	second_point = (new_part_bbox[0] + new_part_bbox[2], new_part_bbox[1])
+
+	# s1 = (first_point[0], first_point[1])
+	# s2 = (second_point[0], second_point[1])
+	# cv2.circle(image, s1, 10, (0,255,255), -1)
+	# cv2.circle(image, s2, 10, (0,255,255), -1)
+
+	# for i in range(pixel_loc2[0].shape[0]):
+	# 	s1 = (pixel_loc2[1][i], pixel_loc2[0][i])
+	# 	cv2.circle(image, s1, 1, (0,255,255), -1)
 
 
+	### Calculating shoulder point
+	f_dis_min = 10000
+	f_dis_index = -1
+	s_dis_min = 10000
+	s_dis_index = -1
+
+	for i in range(pixel_loc2[0].shape[0]):
+		x = pixel_loc2[0][i]
+		y = pixel_loc2[1][i]
+
+		f_dis = np.sqrt((x - first_point[1])*(x - first_point[1]) + (y - first_point[0])*(y - first_point[0]))
+		s_dis = np.sqrt((x - second_point[1])*(x - second_point[1]) + (y - second_point[0])*(y - second_point[0]))
+
+		if (f_dis < f_dis_min):
+			f_dis_min = f_dis
+			f_dis_index = i
+
+		if (s_dis < s_dis_min):
+			s_dis_min = s_dis
+			s_dis_index = i
+
+	estimated_shoulder_loc1 = (pixel_loc2[0][f_dis_index], pixel_loc2[1][f_dis_index])
+	estimated_shoulder_loc2 = (pixel_loc2[0][s_dis_index], pixel_loc2[1][s_dis_index])
+
+	# s1 = (estimated_shoulder_loc1[1], estimated_shoulder_loc1[0])
+	# s2 = (estimated_shoulder_loc2[1], estimated_shoulder_loc2[0])
+	# cv2.circle(image, s1, 10, (0,255,0), -1)
+	# cv2.circle(image, s2, 10, (0,255,0), -1)
 
 
+	f1_dis = np.sqrt((estimated_shoulder_loc1[0] - first_point[1])*(estimated_shoulder_loc1[0] - first_point[1]) + (estimated_shoulder_loc1[1] - first_point[0])*(estimated_shoulder_loc1[1] - first_point[0]))
+	s1_dis = np.sqrt((estimated_shoulder_loc1[0] - second_point[1])*(estimated_shoulder_loc1[0] - second_point[1]) + (estimated_shoulder_loc1[1] - second_point[0])*(estimated_shoulder_loc1[1] - second_point[0]))
+
+	f2_dis = np.sqrt((estimated_shoulder_loc2[0] - first_point[1])*(estimated_shoulder_loc2[0] - first_point[1]) + (estimated_shoulder_loc2[1] - first_point[0])*(estimated_shoulder_loc2[1] - first_point[0]))
+	s2_dis = np.sqrt((estimated_shoulder_loc2[0] - second_point[1])*(estimated_shoulder_loc2[0] - second_point[1]) + (estimated_shoulder_loc2[1] - second_point[0])*(estimated_shoulder_loc2[1] - second_point[0]))
+
+
+	dis_array = np.array([f1_dis, s1_dis, f2_dis, s2_dis])
+	index = np.argmin(dis_array)
+	# print (dis_array)
+	# print (index)
+	final_pixel_loc = (-1, -1)
+
+	if index == 0:
+		final_pixel_loc = (pixel_loc2[0][f_dis_index], pixel_loc2[1][f_dis_index])
+
+	if index == 1:
+		final_pixel_loc = (pixel_loc2[0][f_dis_index], pixel_loc2[1][f_dis_index])
+		second_point = (new_part_bbox[0], new_part_bbox[1])
+
+	if index == 2:
+		final_pixel_loc = (pixel_loc2[0][s_dis_index], pixel_loc2[1][s_dis_index])
+
+	if index == 3:
+		final_pixel_loc = (pixel_loc2[0][s_dis_index], pixel_loc2[1][s_dis_index])
+		second_point = (new_part_bbox[0], new_part_bbox[1])
+
+
+	### Calculating wrist point
+	s_dis_min = 10000
+	s_dis_index = -1
+
+	for i in range(pixel_loc[0].shape[0]):
+		x = pixel_loc[0][i]
+		y = pixel_loc[1][i]
+
+		s_dis = np.sqrt((x - second_point[1])*(x - second_point[1]) + (y - second_point[0])*(y - second_point[0]))
+		if s_dis < s_dis_min:
+			s_dis_min = s_dis
+			s_dis_index = i
+
+	start_pixel_loc = (pixel_loc[0][s_dis_index], pixel_loc[1][s_dis_index])
+
+
+	p1 = (final_pixel_loc[1], final_pixel_loc[0])
+	p2 = (start_pixel_loc[1], start_pixel_loc[0])
+	
+	##### To visualize wrist point
+	# cv2.circle(image, p2, 10, (0,255,0), -1)
+
+
+	##### To visualize shoulder point
+	# cv2.circle(image, p1, 10, (0,255,0), -1)
+
+	cv2.arrowedLine(image, p1, p2, (0,0,255), 2, tipLength = 0.05)
+	cv2.arrowedLine(image, p2, p1, (0,0,255), 2, tipLength = 0.05)
+
+	return image, start_pixel_loc, final_pixel_loc
+	
 

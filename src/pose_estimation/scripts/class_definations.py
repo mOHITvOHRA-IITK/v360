@@ -302,44 +302,17 @@ class vision_demo_class:
 
 			f_path = images_folder_path + '/front.png'
 			human_part_seg_f_path = output_path + '/front.png'
-			f_image = cv2.imread(f_path)
-			f_mask = cv2.imread(human_part_seg_f_path)
+			i1 = cv2.imread(f_path)
+			m1 = cv2.imread(human_part_seg_f_path)
 
 			s_path = images_folder_path + '/side.png'
 			human_part_seg_s_path = output_path + '/side.png'
-			s_image = cv2.imread(s_path)
-			s_mask = cv2.imread(human_part_seg_s_path)
-			get_measuremnets(f_image, f_mask, s_image, s_mask, True)
+			i2 = cv2.imread(s_path)
+			m2 = cv2.imread(human_part_seg_s_path)
 
-			# front_waist_width, front_chest_width, front_person_height = self.get_front_measurements()
-			# side_waist_width, side_chest_width, side_person_height = self.get_side_measurements()
-			
-			# cm_per_pixel = actual_height / front_person_height
-			# front_waist_in_cm = front_waist_width*cm_per_pixel
-			# front_chest_in_cm = front_chest_width*cm_per_pixel
+			actual_height = (12*self.height_feet + self.height_inch) * 2.54 # conversion in cm
+			get_measuremnets(i1, m1, i2, m2, actual_height, True)
 
-
-
-			# cm_per_pixel = actual_height / side_person_height
-			# side_waist_in_cm = side_waist_width*cm_per_pixel
-			# side_chest_in_cm = side_chest_width*cm_per_pixel
-
-
-			# print ('front_waist_in_cm', front_waist_in_cm, ' and in inches ', front_waist_in_cm/2.54)
-			# print ('side_waist_in_cm', side_waist_in_cm, ' and in inches ', side_waist_in_cm/2.54)
-			# r1 = front_waist_in_cm/2
-			# r2 = side_waist_in_cm/2
-			# waist = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
-			# print ('waist_in_cm', waist, ' and in inches ', waist/2.54)
-
-
-
-			# print ('front_chest_in_cm', front_chest_in_cm, ' and in inches ', front_chest_in_cm/2.54)
-			# print ('side_chest_in_cm', side_chest_in_cm, ' and in inches ', side_chest_in_cm/2.54)
-			# r1 = front_chest_in_cm/2
-			# r2 = side_chest_in_cm/2
-			# chest = 2*(22/7)*np.sqrt(0.5*r1*r1 + 0.5*r2*r2)
-			# print ('chest_in_cm', chest, ' and in inches ', chest/2.54)
 
 		else:
 			if self.img_timer_flag == False:
@@ -356,32 +329,6 @@ class vision_demo_class:
 				self.process_button = False
 				self.img_timer_flag = False
 
-
-
-
-	def get_front_measurements(self):
-		image_path = images_folder_path + '/front.png'
-		human_part_seg_path = output_path + '/front.png'
-
-		image = cv2.imread(image_path)
-		mask = cv2.imread(human_part_seg_path)
-
-		waist_width, chest_width, person_height = get_front_chest_and_waist(image, mask, visualize=True)
-
-		return waist_width, chest_width, person_height
-
-
-
-	def get_side_measurements(self):
-		image_path = images_folder_path + '/side.png'
-		human_part_seg_path = output_path + '/side.png'
-
-		image = cv2.imread(image_path)
-		mask = cv2.imread(human_part_seg_path)
-
-		waist_width, chest_width, person_height = get_side_chest_and_waist(image, mask, visualize=True)
-
-		return waist_width, chest_width, person_height
 
 
 
