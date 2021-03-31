@@ -28,8 +28,13 @@ images_folder_path = './images/'
 output_path = './output/'
 
 
-model = networks.init_model('resnet101', num_classes=7, pretrained=None)
+num_classes = 7
+# num_classes = 20
+# num_classes = 18
+model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
 state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908270938-pascal-person-part.pth')['state_dict']
+# state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908261155-lip.pth')['state_dict']
+# state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908301523-atr.pth')['state_dict']
 from collections import OrderedDict
 new_state_dict = OrderedDict()
 for k, v in state_dict.items():
@@ -272,7 +277,7 @@ class vision_demo_class:
 			dataset = SimpleFolderDataset(root=images_folder_path, input_size=input_size, transform=transform)
 			dataloader = DataLoader(dataset)
 
-			palette = get_palette(7)
+			palette = get_palette(num_classes)
 
 			with torch.no_grad():
 				for idx, batch in enumerate(tqdm(dataloader)):
