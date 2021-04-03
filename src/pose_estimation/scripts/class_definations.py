@@ -24,6 +24,7 @@ alpha = 0.4
 
 
 
+
 images_folder_path = './images/'
 output_path = './output/'
 
@@ -102,25 +103,33 @@ def get_mouse_click(event,x,y,flags,param):
 
 
 
-
+previous_frame = None
 
 class vision_demo_class:
 
 	
 
-	def __init__(self, image_timer_value):
+	def __init__(self, image_timer_value, use_server_arg):
 
 
+		global previous_frame
+		self.use_server = use_server_arg
 		self.cap = cv2.VideoCapture(0)
-		if not self.cap.isOpened():
-		    raise IOError("Cannot open webcam")
-		    exit()
+		# if not self.cap.isOpened():
+		#     raise IOError("Cannot open webcam")
+
 
 		# self.cap.set(cv2.CAP_PROP_FPS, 30)
 		# self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 		# self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-		_, frame = self.cap.read()
+		frame_received, frame = self.cap.read()
+		if frame_received == False:
+			frame = previous_frame
+		else:
+			previous_frame = frame
+		
+
 		self.image_height, self.image_width, layers = frame.shape
 
 				
@@ -178,15 +187,27 @@ class vision_demo_class:
 		self.height_inch = 0
 
 		
-		cv2.namedWindow('Visual_Try_ON')
-		cv2.setMouseCallback('Visual_Try_ON', get_mouse_click)		
+		if self.use_server == False:
+			cv2.namedWindow('Visual_Try_ON')
+			cv2.setMouseCallback('Visual_Try_ON', get_mouse_click)		
 
 	
 	
+	def __del__(self):
+		#releasing camera
+		self.cap.release()
 
+	
 	def get_current_frame(self):
 
-		_, frame = self.cap.read()
+		global previous_frame
+
+		frame_received, frame = self.cap.read()
+		if frame_received == False:
+			frame = previous_frame
+		else:
+			previous_frame = frame
+
 		frame = cv2.flip(frame, 1) 
 
 		self.timer = cv2.getTickCount()     # start the timer for the calculation of fps in function view_frame
@@ -198,11 +219,12 @@ class vision_demo_class:
 
 	def view_frame(self):
 	
-		self.fps = cv2.getTickFrequency() / (cv2.getTickCount() - self.timer)        # fps calculation with timer start in function get_current_frame.
+		# self.fps = cv2.getTickFrequency() / (cv2.getTickCount() - self.timer)        # fps calculation with timer start in function get_current_frame.
 		# self.current_frame = write_data(self.current_frame, 'fps:' + str(int(self.fps)), 0.05, 0.74, 0.17, 0.10, 0.01, 0.07, 1, 2, (255, 0, 255))
 		cv2.imshow('Visual_Try_ON', self.current_frame)
 		cv2.waitKey(1)
 
+		
 
 	
 	def buttons(self, array, background_color, txt, text_color):
@@ -339,6 +361,7 @@ class vision_demo_class:
 
 	def first_screen(self):
 
+
 		self.get_current_frame()
 
 
@@ -382,8 +405,10 @@ class vision_demo_class:
 				self.setting_screen()
 
 
+		if self.use_server == False:
+			self.view_frame()	
 
-		self.view_frame()
+
 
 
 
@@ -486,3 +511,6 @@ class vision_demo_class:
 
 		
 
+	def get_frame(self):
+		ret, jpeg = cv2.imencode('.jpg', self.current_frame)
+		return jpeg.tobytes()

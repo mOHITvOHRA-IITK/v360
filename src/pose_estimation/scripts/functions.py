@@ -111,7 +111,6 @@ def get_part_bounding_box(mask, visualize_bbox=False):
 
 
 
-
 def get_person_front_measurements(image, mask, visualize=False):
 	waist_mask = get_waist_pixels_mask(mask)
 	waist_bbox = get_part_bounding_box(waist_mask)
@@ -134,7 +133,6 @@ def get_person_front_measurements(image, mask, visualize=False):
 
 
 	return waist_bbox[2], person_bbox[3]
-
 
 
 
@@ -164,7 +162,6 @@ def get_person_side_measurements(image, mask, visualize=False):
 
 	# return np.int(np.sqrt(waist_bbox[2]*waist_bbox[2] + waist_bbox[3]*waist_bbox[3])), person_bbox[3]
 	return waist_bbox[2], person_bbox[3]
-
 
 
 
@@ -217,7 +214,6 @@ def get_chest_pixels_mask(mask):
 	chest_array[chest_pixels, :] = [255, 255, 255]
 
 	return chest_array
-
 
 
 
@@ -387,6 +383,10 @@ def fit_rotated_rectangle_on_thighs(image, mask, side_image, side_mask, visualiz
 	x = (upper_legs_array[:,:,0] == 255) & (cropped_upper_legs_array[:,:,0] == 255)
 	cropped_upper_legs_array = 0*mask_array
 	cropped_upper_legs_array[x, :] = [255, 255, 255]
+
+	# ### To visualize the cropped legs
+	# cv2.imshow('cropped_upper_legs_array', cropped_upper_legs_array)
+	# cv2.waitKey(0)
 
 
 	cropped = 0*mask_array

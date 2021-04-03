@@ -5,11 +5,11 @@ from functions import *
 
 
 
-front_image_real_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/images/front4.png'
-side_image_real_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/images/side4.png'
+front_image_real_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/images/front5.png'
+side_image_real_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/images/side5.png'
 
-front_image_human_part_seg_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/output/front4.png'
-side_image_human_part_seg_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/output/side4.png'
+front_image_human_part_seg_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/output/front5.png'
+side_image_human_part_seg_path = '/home/mohit/v360_ws/src/pose_estimation/scripts/output/side5.png'
 
 # front_image_real_path = '/home/mohit/Self-Correction-Human-Parsing-master/input/1.png'
 # side_image_real_path = '/home/mohit/Self-Correction-Human-Parsing-master/input/2.png'
