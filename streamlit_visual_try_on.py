@@ -4,7 +4,7 @@ import streamlit as st
 from streamlit_class import *
 
 
-st.title("Architecture")
+st.title("Visual Try On")
 
 image_saved_path = '/streamlit_images'
 if os.path.isdir(os.getcwd() + image_saved_path) == False:
@@ -56,7 +56,6 @@ with options:
 				os.remove(os.getcwd() + image_saved_path + '/side.png')
 			
 			
-
 		s_s_i = save_side_button.button('save_side_image')
 		if s_s_i:
 			start_count_down()

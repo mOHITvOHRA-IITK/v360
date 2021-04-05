@@ -13,6 +13,7 @@ from datasets.simple_extractor_dataset import SimpleFolderDataset
 from functions import get_measuremnets
 
 
+
 image_saved_path = '/streamlit_images'
 if os.path.isdir(os.getcwd() + image_saved_path) == False:
 	os.mkdir(os.getcwd() + image_saved_path)
@@ -25,7 +26,7 @@ if os.path.isdir(os.getcwd() + process_image_path) == False:
 
 num_classes = 7
 model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
-state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908270938-pascal-person-part.pth')['state_dict']
+state_dict = torch.load(os.getcwd() + '/weights/' + 'exp-schp-201908270938-pascal-person-part.pth')['state_dict']
 from collections import OrderedDict
 new_state_dict = OrderedDict()
 for k, v in state_dict.items():
@@ -66,6 +67,9 @@ human_dis_in_cm = -1
 human_image = np.array([])
 human_side_image = np.array([])
 
+
+global uploaded_image, uploaded_image_flag
+uploaded_image_flag = False
 
 countdown = 5
 
@@ -296,3 +300,37 @@ def store_human_info(waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, 
 def get_human_info():
 	global human_waist, human_chest, human_thigh, human_front_sleeve_in_cm, human_dis_in_cm, human_image, human_side_image
 	return human_waist, human_chest, human_thigh, human_front_sleeve_in_cm, human_dis_in_cm, human_image, human_side_image
+
+
+
+
+
+
+def get_uploaded_image(image):
+	global uploaded_image, uploaded_image_flag
+	if uploaded_image_flag == False:
+		uploaded_image = image
+		uploaded_image_flag = True
+
+
+
+def save_uploaded_image(path):
+	global uploaded_image, uploaded_image_flag
+	if uploaded_image_flag:
+		uploaded_image_flag = False
+		# cv2.imwrite(path, uploaded_image)
+		return uploaded_image
+
+
+
+
+
+def visualize_specif_image():
+	global uploaded_image, uploaded_image_flag
+	if uploaded_image_flag:
+		frame = cv2.cvtColor(uploaded_image, cv2.COLOR_RGB2BGR)
+		return frame, True
+	else:
+		return np.array([]), False
+
+	
