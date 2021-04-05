@@ -7,10 +7,12 @@ This repository has some codes for estimating human dimensions from single image
 
 ## Requirements
 
-install CUDA Toolkit from [nvidia](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
-
+1. install CUDA Toolkit from [nvidia](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+2. install python3.6.9 or higher version
 ```
-pip install -r requirements.txt
+sudo apt install python3-pip
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
 ```
 
 

@@ -2,3 +2,7 @@ opencv-python==4.5.1.48
 streamlit==0.79.0
 torch==1.6.0 
 torchvision==0.7.0
+tqdm
+ninja
+scikit-image
+sklearn
