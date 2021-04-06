@@ -678,7 +678,7 @@ def get_measuremnets(i1, m1, i2, m2, actual_height, visualize=False):
 	p1, p2, p3, p4 = get_ankle_pixels(i1, m1)
 
 	if p1[0] < 0:
-		return False, -1, -1, -1, -1, -1, None, None
+		return False, -1, -1, -1, -1, -1, i1, i2
 
 
 	

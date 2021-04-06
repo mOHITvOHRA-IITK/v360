@@ -21,7 +21,7 @@ with options:
 	height = st.checkbox('Height')
 	save = st.checkbox('Save')
 	upload = st.checkbox('Upload')
-	process = st.checkbox('Process')
+	# process = st.checkbox('Process')
 
 	feet_slider = st.empty()
 	inch_slider = st.empty()
@@ -73,11 +73,13 @@ with options:
 			st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
 
 
+	process = st.button('Process')
 	if process:
 		height_feet, height_inch = get_height_feet_inch()
 		status, waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image = process_image(height_feet, height_inch)
-		if status:
-			store_human_info(waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image)
+		store_human_info(waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image)
+		
+
 
 
 with live_feed:
@@ -109,7 +111,7 @@ with live_feed:
 		frame = get_current_feed()
 		frame = cv2.flip(frame, 1) 
 		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-		FRAME_WINDOW.image(frame)
+		FRAME_WINDOW.image(frame, caption='Live Feed')
 
 		key_count += 1
 
@@ -120,62 +122,62 @@ with live_feed:
 		if save:
 			
 			if check_both_images_saved():
-				string_data = os.getcwd() + image_saved_path
+				string_data = 'Saved in ' + os.getcwd() + image_saved_path
 				input = image_save_status_text.text_input('image save status', value=string_data, key=key_count)
 			else:
 				string_data = 'Need To save images'
 				input = image_save_status_text.text_input('image save status', value=string_data, key=key_count)
 
-				count_down = get_countdown()
-				empty_string_data = '***********'
-				string_data = 'saving image in ' +  str(count_down) + ' seconds'
-				if count_down > -1:
-					input = save_text.text_input('image countdown', value=string_data, key=key_count)
-					if count_down == 0:
-						frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-						if os.path.isfile(os.getcwd() + image_saved_path + '/front.png') == False:
-							cv2.imwrite(os.getcwd() + image_saved_path + '/front.png', frame)
+			count_down = get_countdown()
+			empty_string_data = '***********'
+			string_data = 'saving image in ' +  str(count_down) + ' seconds'
+			if count_down > -1:
+				input = save_text.text_input('image countdown', value=string_data, key=key_count)
+				if count_down == 0:
+					frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+					if os.path.isfile(os.getcwd() + image_saved_path + '/front.png') == False:
+						cv2.imwrite(os.getcwd() + image_saved_path + '/front.png', frame)
 
-						elif os.path.isfile(os.getcwd() + image_saved_path + '/side.png') == False:
-							cv2.imwrite(os.getcwd() + image_saved_path + '/side.png', frame)
+					elif os.path.isfile(os.getcwd() + image_saved_path + '/side.png') == False:
+						cv2.imwrite(os.getcwd() + image_saved_path + '/side.png', frame)
 
-						save_front_side_images(False, frame)
-				else:
-					input = save_text.text_input('image countdown', value=empty_string_data, key=key_count)
+					save_front_side_images(False, frame)
+			else:
+				input = save_text.text_input('image countdown', value=empty_string_data, key=key_count)
 
 
 
 		waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image = get_human_info()
 
 		if waist > 0:
-			string_data = 'waist ' + str(round(waist)) + '(cm) ' + str(round(waist/2.54)) + '(inches)'
+			string_data = 'waist ' + str(round(waist)) + '(cm), ' + str(round(waist/2.54)) + '(inches)'
 			input = waist_text.text_input('waist', value=string_data, key=key_count)
 
 		if chest > 0:
-			string_data = 'chest ' + str(round(chest)) + '(cm) ' + str(round(chest/2.54)) + '(inches)'
+			string_data = 'chest ' + str(round(chest)) + '(cm), ' + str(round(chest/2.54)) + '(inches)'
 			input = chest_text.text_input('chest', value=string_data, key=key_count)
 
 		if thigh > 0:
-			string_data = 'thigh ' + str(round(thigh)) + '(cm) ' + str(round(thigh/2.54)) + '(inches)'
+			string_data = 'thigh ' + str(round(thigh)) + '(cm), ' + str(round(thigh/2.54)) + '(inches)'
 			input = thigh_text.text_input('thigh', value=string_data, key=key_count)
 
 		if front_sleeve_in_cm > 0:
-			string_data = 'front_sleeve ' + str(round(front_sleeve_in_cm)) + '(cm) ' + str(round(front_sleeve_in_cm/2.54)) + '(inches)'
+			string_data = 'front_sleeve ' + str(round(front_sleeve_in_cm)) + '(cm), ' + str(round(front_sleeve_in_cm/2.54)) + '(inches)'
 			input = sleeve_text.text_input('front_sleeve', value=string_data, key=key_count)
 
 		if dis_in_cm > 0:
-			string_data = 'length ' + str(round(dis_in_cm)) + '(cm) ' + str(round(dis_in_cm/2.54)) + '(inches)'
+			string_data = 'length ' + str(round(dis_in_cm)) + '(cm), ' + str(round(dis_in_cm/2.54)) + '(inches)'
 			input = length_text.text_input('length', value=string_data, key=key_count)
 
 
 		if np.array(image).size != 0:
 			image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-			image_widget.image(image)
+			image_widget.image(image, caption='Front image')
 
 
 		if np.array(side_image).size != 0:
 			side_image = cv2.cvtColor(side_image, cv2.COLOR_BGR2RGB)
-			side_image_widget.image(side_image)
+			side_image_widget.image(side_image, caption='Side image')
 		
 			
 		
