@@ -1,9 +1,11 @@
 opencv-python==4.5.1.48
 streamlit==0.79.0
-torch==1.6.0 
-torchvision==0.7.0
+torch 
+torchvision
 tqdm
 ninja
 scikit-image
 sklearn
 termcolor
+
+install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
