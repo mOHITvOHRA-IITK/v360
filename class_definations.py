@@ -30,12 +30,8 @@ output_path = './output/'
 
 
 num_classes = 7
-# num_classes = 20
-# num_classes = 18
 model = networks.init_model('resnet101', num_classes=num_classes, pretrained=None)
-state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908270938-pascal-person-part.pth')['state_dict']
-# state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908261155-lip.pth')['state_dict']
-# state_dict = torch.load('/home/mohit/Self-Correction-Human-Parsing-master/exp-schp-201908301523-atr.pth')['state_dict']
+state_dict = torch.load('./weights/exp-schp-201908270938-pascal-person-part.pth')['state_dict']
 from collections import OrderedDict
 new_state_dict = OrderedDict()
 for k, v in state_dict.items():

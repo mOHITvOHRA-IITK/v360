@@ -1,7 +1,7 @@
 # Visualthree60
 
 ## INTRODUCTION
-This repository has some codes for estimating human dimensions from single image. This repository uses the human part detection module from the repo [Self Correction for Human Parsing](https://github.com/PeikeLi/Self-Correction-Human-Parsing)
+This repository has some codes for estimating human dimensions from multiple image. This repository uses the human part detection module from the repo [Self Correction for Human Parsing](https://github.com/PeikeLi/Self-Correction-Human-Parsing)
 
 
 

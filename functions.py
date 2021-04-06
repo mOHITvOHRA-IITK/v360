@@ -677,6 +677,10 @@ def get_measuremnets(i1, m1, i2, m2, actual_height, visualize=False):
 
 	p1, p2, p3, p4 = get_ankle_pixels(i1, m1)
 
+	if p1[0] < 0:
+		return False, -1, -1, -1, -1, -1, None, None
+
+
 	
 	# get side view full height and torse+head ratio
 	side_full_height_pixels, side_head_torse_height_pixels = get_human_head_torse_fraction_of_actual_height(i2, m2)
@@ -977,6 +981,10 @@ def get_ankle_pixels(i1, m1):
 
 	points_x = []
 	points_y = []
+
+	if len(contours) < 2:
+		p1 = (-1, -1)
+		return p1, p1, p1, p1 
 
 	for j in range(2):
 		contour_mask = 0*skeleton
