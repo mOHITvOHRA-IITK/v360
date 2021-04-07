@@ -5,21 +5,24 @@ This repository has some codes for estimating human dimensions from multiple ima
 
 
 
-## Requirements
+## Requirements using Pip or Conda
 
+1. Make directory `./v360`
+2. `cd /path/to/v360`
+3. Clone this repository
+
+
+**Pip**
 1. Install CUDA Toolkit from [nvidia](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
 2. Install python3.6.9 or higher version
-3. Make directory `./v360`
-4. `cd /path/to/v360`
-5. Clone this repository
- 
+
 ```
 sudo apt install python3-pip
 pip3 install --upgrade pip
 pip3 install -r requirements.txt
 ```
 
-# For CONDA
+**Conda**
 ```
 conda env create -f environment.yaml
 conda activate v360
