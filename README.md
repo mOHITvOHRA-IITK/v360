@@ -19,6 +19,12 @@ pip3 install --upgrade pip
 pip3 install -r requirements.txt
 ```
 
+# For CONDA
+```
+conda env create -f environment.yaml
+conda activate v360
+```
+
 
 ## Steps
 
