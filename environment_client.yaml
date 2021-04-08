@@ -1,0 +1,14 @@
+name: v360_client
+channels:
+  - conda-forge 
+  - defaults
+dependencies:
+  - opencv=4.5
+  - streamlit=0.79.0
+  - tqdm
+  - ninja
+  - scikit-image
+  - termcolor
+prefix: /home/mohit/miniconda3/envs/v360_client
+
+

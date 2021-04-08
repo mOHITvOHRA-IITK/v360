@@ -5,8 +5,7 @@ This repository has some codes for estimating human dimensions from multiple ima
 
 
 
-## Requirements using Pip or Conda
-
+## Environment setting for server and client using Pip or Miniconda
 1. Make directory `./v360`
 2. `cd /path/to/v360`
 3. Clone this repository
@@ -22,17 +21,54 @@ pip3 install --upgrade pip
 pip3 install -r requirements.txt
 ```
 
-**Conda**
+**Miniconda**
+1. Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 ```
+conda update -n base -c defaults conda
 conda env create -f environment.yaml
 conda activate v360
+pip3 install imagezmq
 ```
 
 
-## Steps
 
+## Environment setting for client using Pip or Miniconda
+
+1. Make directory `./v360`
+2. `cd /path/to/v360`
+3. Clone this repository
+
+
+**Pip**
+1. Install python3.6.9 or higher version
+
+```
+sudo apt install python3-pip
+pip3 install --upgrade pip
+pip3 install -r requirements_client.txt
+```
+
+**Miniconda**
+1. Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+```
+conda update -n base -c defaults conda
+conda env create -f environment_client.yaml
+conda activate v360_client
+pip3 install imagezmq
+```
+
+
+
+
+## Server Steps
 1. Download the weights ([exp-schp-201908270938-pascal-person-part.pth](https://drive.google.com/file/d/1E5YwNKW2VOEayK9mWCS3Kpsxf-3z04ZE/view?usp=sharing)) and store in folder `./weights`.
-2. Run the script `streamlit run streamlit_visual_try_on.py`
+2. To test the code on a single server, Run the script `streamlit run streamlit_visual_try_on.py` 
+3. To run the server, Run the script `python3 streamlit_server.py`
+
+
+## Client Steps
+1. To run the server, Run the script `python3 streamlit_client.py`
+
 
 
 ## Error
