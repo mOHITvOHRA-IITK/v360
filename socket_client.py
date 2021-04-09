@@ -61,7 +61,7 @@ def receive_images_from_other_system():
 			data = data[msg_size:]
 			frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
 			frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-			cv2.imshow('front', frame)
+			# cv2.imshow('front', frame)
 
 
 			while len(data) < payload_size:
@@ -79,22 +79,23 @@ def receive_images_from_other_system():
 			data = data[msg_size:]
 			frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
 			frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-			cv2.imshow('side', frame)
+			# cv2.imshow('side', frame)
 
-			# global_s.close()
-			cv2.waitKey(100)
+			conn.close()
+			# global_s.shutdown()
+			# global_s.close(1)
+			# time.sleep(10.0)
+			# cv2.waitKey(100)
 			receive_thread_task_complete = True
+			conn.close()
 			print ('LEAVING receiving Thread')
 			break
 
 
 		except Exception as e:
-			print ('in except loop')
+			print ('in client receive except')
 			print (e)
-			print ('Terminate the Client')
-			conn.send(b"Please disconnet with server")		
-			# conn.close()
-
+				
 
 
 
@@ -102,31 +103,43 @@ def receive_images_from_other_system():
 def transfer_images_to_other_system():
 	print ('In transfer Thread')
 	global global_s, transfer_thread_task_complete
+
+	while 1:
+		try:
 	
-	if os.path.isfile(os.getcwd() + image_saved_path + '/front.png') and os.path.isfile(os.getcwd() + image_saved_path + '/side.png'):
-		global_s.connect((SERVER_IP, PORT))
+			if os.path.isfile(os.getcwd() + image_saved_path + '/front.png') and os.path.isfile(os.getcwd() + image_saved_path + '/side.png'):
+				global_s.connect((SERVER_IP, PORT))
 
-		file_name = '/front.png'
-		frame = cv2.imread(os.getcwd() + image_saved_path + file_name)
-		result, frame = cv2.imencode('.png', frame)
-		data = pickle.dumps(frame, 0)
-		size = len(data)
-		global_s.sendall(struct.pack(">L", size) + data)
-
-
-		file_name = '/side.png'
-		frame = cv2.imread(os.getcwd() + image_saved_path + file_name)
-		result, frame = cv2.imencode('.png', frame)
-		data = pickle.dumps(frame, 0)
-		size = len(data)
-		global_s.sendall(struct.pack(">L", size) + data)
-		# global_s.close()
+				file_name = '/front.png'
+				frame = cv2.imread(os.getcwd() + image_saved_path + file_name)
+				result, frame = cv2.imencode('.png', frame)
+				data = pickle.dumps(frame, 0)
+				size = len(data)
+				global_s.sendall(struct.pack(">L", size) + data)
 
 
-		from_server = global_s.recv(4096)
-		print (from_server)
-		transfer_thread_task_complete = True
-		print ('LEAVING transfer Thread')
+				file_name = '/side.png'
+				frame = cv2.imread(os.getcwd() + image_saved_path + file_name)
+				result, frame = cv2.imencode('.png', frame)
+				data = pickle.dumps(frame, 0)
+				size = len(data)
+				global_s.sendall(struct.pack(">L", size) + data)
+				# global_s.shutdown(1)
+				# global_s.close()
+				# time.sleep(10.0)
+
+
+				from_server = global_s.recv(4096)
+				print (from_server)
+				transfer_thread_task_complete = True
+				print ('LEAVING transfer Thread')
+				break
+
+
+		except Exception as e:
+			print ('in client transfer except')
+			print (e)
+			
 
 
 

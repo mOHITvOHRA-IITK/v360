@@ -10,13 +10,21 @@ import _thread
 from streamlit_server_class import *
 import time
 
-client_IP = '172.26.173.6'
+
+global client_IP
+client_IP = ''
+# client_IP = '172.26.173.6'
 HOST=''
 PORT = 8081
 PORT2 = 8082 
 
+
+
+
+
 global global_s
 global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 global receive_thread_task_complete, receive_thread_created, transfer_thread_task_complete, transfer_thread_created
 receive_thread_task_complete = False
@@ -42,9 +50,28 @@ BUFFER_SIZE = 4096
 
 def receive_images_from_other_system():
 	print ('IN receiving Thread')
-	global global_s, receive_thread_task_complete
-	global_s.bind(('', PORT))
-	global_s.listen(10)
+	global global_s, receive_thread_task_complete, client_IP
+
+	move_forward = True
+
+	while 1:
+		try:
+			global_s.bind(('', PORT))
+			global_s.listen(10)
+		except Exception as e:
+			print ('in server receive except First one')
+			print (e)
+			global_s.close()
+			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			time.sleep(10.0)
+			move_forward = False
+
+		if move_forward:
+			break
+
+	# hostname = socket.gethostname()
+	# client_IP = socket.gethostbyname(hostname)
 
 	while 1:
 		try:
@@ -94,40 +121,62 @@ def receive_images_from_other_system():
 				conn.send(b"Files received and processed, Sharing the processed image")	
 				receive_thread_task_complete = True
 				print ('LEAVING receiving Thread')
+				conn.close()
+				# global_s.shutdown(1)
+				# global_s.close()
+				# time.sleep(10.0)
 				break
 
 
 		except Exception as e:
-			print ('in except loop')
+			print ('in server receive except')
 			print (e)
-			print ('Terminate the Client')
-			conn.send(b"Please disconnet with server")		
+				
 
 
 
 def transfer_images_to_other_system():
 	print ('In transfer Thread')
-	global global_s, transfer_thread_task_complete
-	if os.path.isfile(os.getcwd() + image_process_path + '/front.png') and os.path.isfile(os.getcwd() + image_process_path + '/side.png'):
-		global_s.connect((client_IP, PORT2))
+	global global_s, transfer_thread_task_complete, client_IP
 
-		file_name = '/front.png'
-		frame = cv2.imread(os.getcwd() + image_process_path + file_name)
-		result, frame = cv2.imencode('.png', frame)
-		data = pickle.dumps(frame, 0)
-		size = len(data)
-		global_s.sendall(struct.pack(">L", size) + data)
+	while 1:
+		try:
+			if os.path.isfile(os.getcwd() + image_process_path + '/front.png') and os.path.isfile(os.getcwd() + image_process_path + '/side.png'):
+				print ('inside if lop')
+				global_s.connect((client_IP, PORT2))
+
+				file_name = '/front.png'
+				frame = cv2.imread(os.getcwd() + image_process_path + file_name)
+				result, frame = cv2.imencode('.png', frame)
+				data = pickle.dumps(frame, 0)
+				size = len(data)
+				global_s.sendall(struct.pack(">L", size) + data)
 
 
-		file_name = '/side.png'
-		frame = cv2.imread(os.getcwd() + image_process_path + file_name)
-		result, frame = cv2.imencode('.png', frame)
-		data = pickle.dumps(frame, 0)
-		size = len(data)
-		global_s.sendall(struct.pack(">L", size) + data)
-		# global_s.close()
-		transfer_thread_task_complete = True
-		print ('LEAVING transfer Thread')
+				file_name = '/side.png'
+				frame = cv2.imread(os.getcwd() + image_process_path + file_name)
+				result, frame = cv2.imencode('.png', frame)
+				data = pickle.dumps(frame, 0)
+				size = len(data)
+				global_s.sendall(struct.pack(">L", size) + data)
+				# global_s.shutdown(1)
+				# global_s.close()
+				# time.sleep(10.0)
+				transfer_thread_task_complete = True
+				print ('LEAVING transfer Thread')
+				break
+
+		
+		except Exception as e:
+			print ('in server transfer except')
+			print (e)
+			global_s.close()
+			time.sleep(10.0)
+			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			
+			
+	
 
 
 
@@ -144,8 +193,9 @@ if __name__ == "__main__":
 
     			global_s.close()
     			time.sleep(10.0)
-
     			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     			transfer_thread_created = True
     			_thread.start_new_thread( transfer_images_to_other_system, () )
 
@@ -153,8 +203,8 @@ if __name__ == "__main__":
     	if receive_thread_task_complete and transfer_thread_task_complete:
     		global_s.close()
     		time.sleep(10.0)
-
     		global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    		global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     		receive_thread_task_complete = False
     		transfer_thread_task_complete = False
     		receive_thread_created = False
