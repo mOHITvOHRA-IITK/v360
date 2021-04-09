@@ -1,12 +1,17 @@
-import numpy as np
 import imagezmq
-import cv2
+from streamlit_server_class import *
 
 
 imageHub = imagezmq.ImageHub()
 
+
 while True:
-	(hostname, frame) = imageHub.recv_image()
-	print ('receiving images from ' hostname )
-	cv2.imshow('frame', frame)
-	cv2.waitKey(1)
+	print ('server')
+
+	(client_info, frame) = imageHub.recv_image()
+	imageHub.send_reply(b'OK')
+
+	# cv2.imshow('frame', frame)
+	# cv2.waitKey(10)
+
+	save_and_send_image(frame, client_info)
