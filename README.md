@@ -31,6 +31,7 @@ conda activate v360_client
 
 ## Note
 1. Make sure to set the prefix in `environment.yaml` or `environment_client.yaml` files.
+2. Check Connection to server using `ping 172.26.174.143` in the terminal, or can change the server IP in the script `client_class.py`
 
 
 
