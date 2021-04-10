@@ -11,12 +11,22 @@ from client_class import *
 
 st.title("Visual Try On")
 
-live_feed, _, options = st.beta_columns([4, 1, 1])
+live_feed, _, options = st.beta_columns([9, 1, 9])
 
 
 with options:
+	help_ = st.checkbox('Help')
+	
+	help_text = st.empty()
+	if help_:
+		help_text.text('1. Place camera parallel to ground at sufficient height. \n2. Store front and side human body images. \n3. Store images when complete body lies at centre of frame. \n4. For front face, arms should be parallel to ground like T shape, and legs should be at 60 degrees seperated. \n5. For side pose, arm should be parallel to groung and both arms should be on your front side. \n6. Feed your height and process')
+	else:
+		help_text.empty()
+
+
+
+
 	height = st.checkbox('Height')
-	save = st.checkbox('Save')
 
 	feet_slider = st.empty()
 	inch_slider = st.empty()
@@ -33,6 +43,8 @@ with options:
 		feet_slider.empty()
 		inch_slider.empty()
 
+
+	save = st.checkbox('Save')
 
 	save_front_button = st.empty()
 	save_side_button = st.empty()
