@@ -12,11 +12,8 @@ import time
 
 
 global client_IP
-client_IP = ''
-# client_IP = '172.26.173.6'
-HOST=''
+client_IP = '0.0.0.0'
 PORT = 8081
-PORT2 = 8082 
 
 
 
@@ -61,21 +58,16 @@ def receive_images_from_other_system():
 		except Exception as e:
 			print ('in server receive except First one')
 			print (e)
-			global_s.close()
-			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-			time.sleep(10.0)
 			move_forward = False
 
 		if move_forward:
 			break
 
-	# hostname = socket.gethostname()
-	# client_IP = socket.gethostbyname(hostname)
 
 	while 1:
 		try:
 			conn,addr= global_s.accept()
+			client_IP = addr[0]
 			data = b""
 			payload_size = struct.calcsize(">L")
 
@@ -117,14 +109,10 @@ def receive_images_from_other_system():
 			process_image()
 
 			if os.path.isfile(os.getcwd() + image_process_path + '/front.png') and os.path.isfile(os.getcwd() + image_process_path + '/side.png'):
-				# global_s.close()
-				conn.send(b"Files received and processed, Sharing the processed image")	
+				conn.send(b"Files received and processed in server, Sharing the processed image")	
 				receive_thread_task_complete = True
 				print ('LEAVING receiving Thread')
 				conn.close()
-				# global_s.shutdown(1)
-				# global_s.close()
-				# time.sleep(10.0)
 				break
 
 
@@ -132,7 +120,7 @@ def receive_images_from_other_system():
 			print ('in server receive except')
 			print (e)
 				
-
+	sys.exit()
 
 
 def transfer_images_to_other_system():
@@ -142,8 +130,7 @@ def transfer_images_to_other_system():
 	while 1:
 		try:
 			if os.path.isfile(os.getcwd() + image_process_path + '/front.png') and os.path.isfile(os.getcwd() + image_process_path + '/side.png'):
-				print ('inside if lop')
-				global_s.connect((client_IP, PORT2))
+				global_s.connect((client_IP, PORT))
 
 				file_name = '/front.png'
 				frame = cv2.imread(os.getcwd() + image_process_path + file_name)
@@ -159,10 +146,8 @@ def transfer_images_to_other_system():
 				data = pickle.dumps(frame, 0)
 				size = len(data)
 				global_s.sendall(struct.pack(">L", size) + data)
-				# global_s.shutdown(1)
-				# global_s.close()
-				# time.sleep(10.0)
 				transfer_thread_task_complete = True
+				global_s.send(b'Processed image has been shared with client')
 				print ('LEAVING transfer Thread')
 				break
 
@@ -170,12 +155,9 @@ def transfer_images_to_other_system():
 		except Exception as e:
 			print ('in server transfer except')
 			print (e)
-			global_s.close()
-			time.sleep(10.0)
-			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
 			
-			
+	sys.exit()		
 	
 
 
@@ -192,7 +174,7 @@ if __name__ == "__main__":
     		if transfer_thread_created == False:
 
     			global_s.close()
-    			time.sleep(10.0)
+    			time.sleep(5.0)
     			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -201,10 +183,12 @@ if __name__ == "__main__":
 
 
     	if receive_thread_task_complete and transfer_thread_task_complete:
+
     		global_s.close()
-    		time.sleep(10.0)
+    		time.sleep(5.0)
     		global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     		global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     		receive_thread_task_complete = False
     		transfer_thread_task_complete = False
     		receive_thread_created = False

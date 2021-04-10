@@ -47,23 +47,6 @@ model.eval()
 
 
 
-def save_and_send_image(frame, client_info):
-	if (os.path.isfile(os.getcwd() + image_saved_path + '/front.png') and os.path.isfile(os.getcwd() + image_saved_path + '/side.png')):
-		os.remove(os.getcwd() + image_saved_path + '/front.png')
-		os.remove(os.getcwd() + image_saved_path + '/side.png')
-
-		
-	if os.path.isfile(os.getcwd() + image_saved_path + '/front.png') == False:
-		cv2.imwrite(os.getcwd() + image_saved_path + '/front.png', frame)
-
-
-	elif os.path.isfile(os.getcwd() + image_saved_path + '/side.png') == False:
-		cv2.imwrite(os.getcwd() + image_saved_path + '/side.png', frame)
-
-
-	if (os.path.isfile(os.getcwd() + image_saved_path + '/front.png') and os.path.isfile(os.getcwd() + image_saved_path + '/side.png')):
-		process_image()
-		# create_sender_obj(client_info)
 
 
 
@@ -125,37 +108,6 @@ def process_image():
 			output_img.save(parsing_result_path)
 
 
-
-
-global sender_obj, sende_obj_flag, sender_ip_address
-sende_obj_flag = False
-
-
-def create_sender_obj(client_info):
-	global sender_obj, sende_obj_flag, sender_ip_address
-	if sende_obj_flag == False:
-		sender_obj = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(client_info))
-		sende_obj_flag = True
-		hostname = socket.gethostname()
-		sender_ip_address = socket.gethostbyname(hostname)
-
-	if sende_obj_flag:
-		send_front_image()
-		send_side_image()
-
-
-
-
-def send_front_image():
-	global sender_obj, sender_ip_address, front_image_flag
-	frame = cv2.imread(os.getcwd() + process_image_path + '/front.png')
-	sender_obj.send_image(sender_ip_address, frame)
-
-
-def send_side_image():
-	global sender_obj, sender_ip_address, side_image_flag
-	frame = cv2.imread(os.getcwd() + process_image_path + '/side.png')
-	sender_obj.send_image(sender_ip_address, frame)
 
 
 

@@ -1,21 +1,18 @@
-import imagezmq
 import socket
 import time
 import streamlit as st
 import cv2
 import os
-from streamlit_client_class import *
+from client_class import *
 
 
 
-create_sender_obj()
-client_host_name = socket.gethostname()
 
 
 st.title("Visual Try On")
 
-
 live_feed, _, options = st.beta_columns([4, 1, 1])
+
 
 with options:
 	height = st.checkbox('Height')
@@ -61,8 +58,11 @@ with options:
 
 
 	process = st.button('Process')
-	# if process:
-	# 	save_process_images()
+	if process:
+		create_sender_obj()
+		load_images_on_server()
+		receive_processed_images_from_server()
+
 		
 
 
@@ -125,7 +125,7 @@ with live_feed:
 		else:
 			input = save_text.text_input('image countdown', value=string_data, key=key_count)
 			if count_down == 0:
-				send_images(frame)
+				save_images(frame)
 				stop_count_down()
 
 
@@ -133,36 +133,36 @@ with live_feed:
 
 
 
-		# waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image = get_human_info()
+		waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image = get_human_info()
 
-		# if waist > 0:
-		# 	string_data = 'waist ' + str(round(waist)) + '(cm), ' + str(round(waist/2.54)) + '(inches)'
-		# 	input = waist_text.text_input('waist', value=string_data, key=key_count)
+		if waist > 0:
+			string_data = 'waist ' + str(round(waist)) + '(cm), ' + str(round(waist/2.54)) + '(inches)'
+			input = waist_text.text_input('waist', value=string_data, key=key_count)
 
-		# if chest > 0:
-		# 	string_data = 'chest ' + str(round(chest)) + '(cm), ' + str(round(chest/2.54)) + '(inches)'
-		# 	input = chest_text.text_input('chest', value=string_data, key=key_count)
+		if chest > 0:
+			string_data = 'chest ' + str(round(chest)) + '(cm), ' + str(round(chest/2.54)) + '(inches)'
+			input = chest_text.text_input('chest', value=string_data, key=key_count)
 
-		# if thigh > 0:
-		# 	string_data = 'thigh ' + str(round(thigh)) + '(cm), ' + str(round(thigh/2.54)) + '(inches)'
-		# 	input = thigh_text.text_input('thigh', value=string_data, key=key_count)
+		if thigh > 0:
+			string_data = 'thigh ' + str(round(thigh)) + '(cm), ' + str(round(thigh/2.54)) + '(inches)'
+			input = thigh_text.text_input('thigh', value=string_data, key=key_count)
 
-		# if front_sleeve_in_cm > 0:
-		# 	string_data = 'front_sleeve ' + str(round(front_sleeve_in_cm)) + '(cm), ' + str(round(front_sleeve_in_cm/2.54)) + '(inches)'
-		# 	input = sleeve_text.text_input('front_sleeve', value=string_data, key=key_count)
+		if front_sleeve_in_cm > 0:
+			string_data = 'front_sleeve ' + str(round(front_sleeve_in_cm)) + '(cm), ' + str(round(front_sleeve_in_cm/2.54)) + '(inches)'
+			input = sleeve_text.text_input('front_sleeve', value=string_data, key=key_count)
 
-		# if dis_in_cm > 0:
-		# 	string_data = 'length ' + str(round(dis_in_cm)) + '(cm), ' + str(round(dis_in_cm/2.54)) + '(inches)'
-		# 	input = length_text.text_input('length', value=string_data, key=key_count)
-
-
-		# if np.array(image).size != 0:
-		# 	image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-		# 	image_widget.image(image, caption='Front image')
+		if dis_in_cm > 0:
+			string_data = 'length ' + str(round(dis_in_cm)) + '(cm), ' + str(round(dis_in_cm/2.54)) + '(inches)'
+			input = length_text.text_input('length', value=string_data, key=key_count)
 
 
-		# if np.array(side_image).size != 0:
-		# 	side_image = cv2.cvtColor(side_image, cv2.COLOR_BGR2RGB)
-		# 	side_image_widget.image(side_image, caption='Side image')
+		if np.array(image).size != 0:
+			image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+			image_widget.image(image, caption='Front image')
+
+
+		if np.array(side_image).size != 0:
+			side_image = cv2.cvtColor(side_image, cv2.COLOR_BGR2RGB)
+			side_image_widget.image(side_image, caption='Side image')
 		
 

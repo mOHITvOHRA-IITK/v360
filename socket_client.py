@@ -18,13 +18,12 @@ if os.path.isdir(os.getcwd() + image_saved_path) == False:
 SERVER_IP = '172.26.174.143'
 HOST=''
 PORT = 8081
-PORT2 = 8082
 
 BUFFER_SIZE = 4096
 
 global global_s
 global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
+global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 global receive_thread_task_complete, receive_thread_created, transfer_thread_task_complete, transfer_thread_created
 receive_thread_task_complete = False
@@ -37,7 +36,7 @@ transfer_thread_created = False
 def receive_images_from_other_system():
 	print ('IN receiving Thread')
 	global global_s, receive_thread_task_complete
-	global_s.bind(('',PORT2))
+	global_s.bind(('',PORT))
 	global_s.listen(10)
 
 	while 1:
@@ -82,12 +81,7 @@ def receive_images_from_other_system():
 			# cv2.imshow('side', frame)
 
 			conn.close()
-			# global_s.shutdown()
-			# global_s.close(1)
-			# time.sleep(10.0)
-			# cv2.waitKey(100)
 			receive_thread_task_complete = True
-			conn.close()
 			print ('LEAVING receiving Thread')
 			break
 
@@ -97,6 +91,7 @@ def receive_images_from_other_system():
 			print (e)
 				
 
+	sys.exit()
 
 
 
@@ -124,10 +119,6 @@ def transfer_images_to_other_system():
 				data = pickle.dumps(frame, 0)
 				size = len(data)
 				global_s.sendall(struct.pack(">L", size) + data)
-				# global_s.shutdown(1)
-				# global_s.close()
-				# time.sleep(10.0)
-
 
 				from_server = global_s.recv(4096)
 				print (from_server)
@@ -140,13 +131,11 @@ def transfer_images_to_other_system():
 			print ('in client transfer except')
 			print (e)
 			
-
+	sys.exit()
 
 
 
 if __name__ == "__main__":
-	# global global_s
-    # global receive_thread_task_complete, receive_thread_created, transfer_thread_task_complete, transfer_thread_created
     while 1:
 
     	if transfer_thread_task_complete == False:
@@ -157,20 +146,23 @@ if __name__ == "__main__":
     		if receive_thread_created == False:
 
     			global_s.close()
-    			time.sleep(10.0)
-
+    			time.sleep(5.0)
     			global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    			global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     			receive_thread_created = True
     			_thread.start_new_thread( receive_images_from_other_system, () )
 
 
 
     	if receive_thread_task_complete and transfer_thread_task_complete:
-    		global_s.close()
-    		time.sleep(10.0)
 
-    		global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    		receive_thread_task_complete = False
-    		transfer_thread_task_complete = False
-    		receive_thread_created = False
-    		transfer_thread_created = False
+    		global_s.close()
+    		# time.sleep(10.0)
+    		# global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    		# global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    	# 	receive_thread_task_complete = False
+    	# 	transfer_thread_task_complete = False
+    	# 	receive_thread_created = False
+    	# 	transfer_thread_created = False
