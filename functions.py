@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 from skimage.morphology import skeletonize
-from sklearn import linear_model
 
 
 
