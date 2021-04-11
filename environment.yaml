@@ -14,6 +14,6 @@ dependencies:
   - scikit-image
   - scikit-learn
   - termcolor
-prefix: /home/mohit/miniconda3/envs/v360
+#prefix: /home/mohit/miniconda3/envs/v360
 
 

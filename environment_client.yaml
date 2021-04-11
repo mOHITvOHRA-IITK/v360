@@ -9,6 +9,6 @@ dependencies:
   - ninja
   - scikit-image
   - termcolor
-prefix: /home/mohit/miniconda3/envs/v360_client
+#prefix: /home/mohit/miniconda3/envs/v360_client
 
 
