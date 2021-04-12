@@ -20,12 +20,14 @@ with options:
 	help_line1 = st.empty()
 	help_line2 = st.empty()
 	help_line3 = st.empty()
-	images_st = st.empty()
 	help_line4 = st.empty()
+	images_st = st.empty()
+	help_line5 = st.empty()
 	if help_:
-		help_line1.text('1. Place camera parallel to ground \nat your waist height.')
-		help_line2.text('2. Feed your height.')
-		help_line3.text('3. Store front and side human body \nimages as shown below.')
+		help_line1.text('1. Click on "Live Feed" to start the \ncamera.')
+		help_line2.text('2. Place camera parallel to ground \nat the waist height.')
+		help_line3.text('3. Feed your height.')
+		help_line4.text('4. Store front and side human body \nimages as shown below.')
 
 		image_example_path = '/help_images'
 
@@ -37,17 +39,12 @@ with options:
 			image2 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 			h,w,c = np.array(image).shape
-			blank_image = 0*image
-			h,w,c = np.array(blank_image).shape
-			print (h,w,c)
 			blank_image = 255*np.ones([int(h/3), w,c], np.uint8)
 			h,w,c = np.array(blank_image).shape
-			print (h,w,c)
-			print ()
 			images_st.image([image1, blank_image, image2], caption=['Front image', '', 'Side image'], width=96)
 
 
-		help_line4.text('4. Press process button')
+		help_line5.text('5. Press "Process" button')
 		
 
 
