@@ -17,11 +17,38 @@ live_feed, _, options = st.beta_columns([9, 1, 9])
 with options:
 	help_ = st.checkbox('Help')
 	
-	help_text = st.empty()
+	help_line1 = st.empty()
+	help_line2 = st.empty()
+	help_line3 = st.empty()
+	images_st = st.empty()
+	help_line4 = st.empty()
 	if help_:
-		help_text.text('1. Place camera parallel to ground at sufficient height. \n2. Store front and side human body images. \n3. Store images when complete body lies at centre of frame. \n4. For front face, arms should be parallel to ground like T shape, and legs should be at 60 degrees seperated. \n5. For side pose, arm should be parallel to groung and both arms should be on your front side. \n6. Feed your height and process')
-	else:
-		help_text.empty()
+		help_line1.text('1. Place camera parallel to ground \nat your waist height.')
+		help_line2.text('2. Feed your height.')
+		help_line3.text('3. Store front and side human body \nimages as shown below.')
+
+		image_example_path = '/help_images'
+
+		if os.path.isfile(os.getcwd() + image_example_path + '/front.png') and os.path.isfile(os.getcwd() + image_example_path + '/side.png'):
+			image = cv2.imread(os.getcwd() + image_example_path + '/front.png')
+			image1 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+		
+			image = cv2.imread(os.getcwd() + image_example_path + '/side.png')
+			image2 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+			h,w,c = np.array(image).shape
+			blank_image = 0*image
+			h,w,c = np.array(blank_image).shape
+			print (h,w,c)
+			blank_image = 255*np.ones([int(h/3), w,c], np.uint8)
+			h,w,c = np.array(blank_image).shape
+			print (h,w,c)
+			print ()
+			images_st.image([image1, blank_image, image2], caption=['Front image', '', 'Side image'], width=96)
+
+
+		help_line4.text('4. Press process button')
+		
 
 
 
@@ -91,9 +118,10 @@ with live_feed:
 
 	FRAME_WINDOW = st.image([])
 	key_count = 0
+
 	height_text = st.empty()
-	save_text = st.empty()
 	image_save_status_text = st.empty()
+	save_text = st.empty()
 
 	waist_text = st.empty()
 	chest_text = st.empty()
