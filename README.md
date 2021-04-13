@@ -42,7 +42,7 @@ conda activate v360_client
 
 ## Note
 1. Environment setting takes significant amount of time (20-40 minutes).
-2. Check Connection to server using `ping 172.26.174.143` in the terminal, or can change the server IP in the script `client_class.py`
+2. Check Connection to server using `ping 74.82.31.134` in the terminal, or can change the server IP in the script `client_class.py`
 
 
 

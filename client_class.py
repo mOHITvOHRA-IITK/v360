@@ -29,8 +29,7 @@ SERVER_IP = '172.26.174.143'
 # Visual360 server IP
 # SERVER_IP = '74.82.31.134'
 
-
-PORT = 8080
+PORT = 5000
 BUFFER_SIZE = 4096
 
 global global_s, socket_created_flag, front_image_flag, side_image_flag, calculate_human_dim
@@ -116,32 +115,27 @@ def load_images_on_server():
 			print (e)
 
 
-	global_s.close()
-	time.sleep(5.0)
-	global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
 
 
 def receive_processed_images_from_server():
-	global global_s, calculate_human_dim
-	global_s.bind(('', PORT))
-	global_s.listen(5)
+	global global_s, socket_created_flag, calculate_human_dim
+
 
 	while 1:
 		try:
-			conn,addr = global_s.accept()
 			data = b""
 			payload_size = struct.calcsize(">L")
 
 			while len(data) < payload_size:
-				data += conn.recv(BUFFER_SIZE)
+				data += global_s.recv(BUFFER_SIZE)
 				
 			packed_msg_size = data[:payload_size]
 			data = data[payload_size:]
 			msg_size = struct.unpack(">L", packed_msg_size)[0]
 
 			while len(data) < msg_size:
-				data += conn.recv(4096)
+				data += global_s.recv(4096)
 
 			frame_data = data[:msg_size]
 			data = data[msg_size:]
@@ -152,14 +146,14 @@ def receive_processed_images_from_server():
 
 
 			while len(data) < payload_size:
-				data += conn.recv(BUFFER_SIZE)
+				data += global_s.recv(BUFFER_SIZE)
 				
 			packed_msg_size = data[:payload_size]
 			data = data[payload_size:]
 			msg_size = struct.unpack(">L", packed_msg_size)[0]
 
 			while len(data) < msg_size:
-				data += conn.recv(4096)
+				data += global_s.recv(4096)
 
 			frame_data = data[:msg_size]
 			data = data[msg_size:]
@@ -168,10 +162,9 @@ def receive_processed_images_from_server():
 			# cv2.imshow('side', frame)
 			cv2.imwrite(os.getcwd() + process_image_path + '/side.png', frame)
 
-			from_server = conn.recv(4096)
-			print (from_server)
+			print ('Both processed frames are received in client\n')
 
-			conn.close()
+			calculate_human_dim = True
 			break
 
 
@@ -181,11 +174,8 @@ def receive_processed_images_from_server():
 				
 
 	global_s.close()
-	time.sleep(5.0)
-	global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-	calculate_human_dim = True
-	# socket_created_flag = False
+	socket_created_flag = False
+	
 
 
 
