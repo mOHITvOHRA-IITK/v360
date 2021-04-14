@@ -19,6 +19,7 @@ PORT = 5000
 global global_s
 global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+global_s.setblocking(0)
 
 global conn
 conn = None
@@ -99,7 +100,8 @@ def receive_images_from_client():
 		except Exception as e:
 			print ('In function "receive_images_from_client", Second Exception')
 			print (e)
-		
+
+
 	
 
 
@@ -113,6 +115,7 @@ if __name__ == "__main__":
 		time.sleep(5.0)
 		global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		global_s.setblocking(0)
 
 
 

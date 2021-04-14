@@ -12,7 +12,7 @@ from client_class import *
 st.title("Visual Try On")
 
 live_feed, _, options = st.beta_columns([9, 1, 9])
-
+create_sender_obj()
 
 with options:
 	help_ = st.checkbox('Help')
@@ -95,7 +95,6 @@ with options:
 
 	process = st.button('Process')
 	if process:
-		create_sender_obj()
 		imageDict = transfer_data_to_server()
 		store_imageDict(imageDict)
 

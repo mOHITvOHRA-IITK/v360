@@ -21,10 +21,10 @@ if os.path.isdir(os.getcwd() + process_image_path) == False:
 
 
 # My private IP
-SERVER_IP = '172.26.174.143'
+# SERVER_IP = '172.26.174.143'
 
 # Visual360 server IP
-# SERVER_IP = '74.82.31.134'
+SERVER_IP = '74.82.31.134'
 
 PORT = 5000
 BUFFER_SIZE = 4096
@@ -197,6 +197,7 @@ def transfer_data_to_server():
 			imageDict = pickle.loads(data, fix_imports=True, encoding="bytes")
 
 			global_s.close()
+			time.sleep(5.0)
 			socket_created_flag = False
 			return imageDict
 
