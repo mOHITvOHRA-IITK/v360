@@ -46,6 +46,7 @@ def receive_images_from_client():
 	while 1:
 		move_forward = True
 		try:
+			print ('In bind loop')
 			global_s.bind(('', PORT))
 			global_s.listen(10)
 		except Exception as e:
@@ -58,91 +59,48 @@ def receive_images_from_client():
 
 
 	while 1:
+
 		try:
+			print ('In accept loop')
 			conn, addr = global_s.accept()
 			client_IP = addr[0]
 			data = b""
-			payload_size = struct.calcsize(">L")
 
-			while len(data) < payload_size:
+			data_size = struct.unpack('>I', conn.recv(4))[0]
+
+			while len(data) < data_size:
 				data += conn.recv(BUFFER_SIZE)
-				
-			packed_msg_size = data[:payload_size]
-			data = data[payload_size:]
-			msg_size = struct.unpack(">L", packed_msg_size)[0]
+			
 
-			while len(data) < msg_size:
-				data += conn.recv(4096)
+			imageDict = pickle.loads(data, fix_imports=True, encoding="bytes")
+			front = imageDict['front_image']
+			cv2.imwrite(os.getcwd() + image_saved_path + '/front.png', front)
 
-			print ('First Frame Received in Server')
-			frame_data = data[:msg_size]
-			data = data[msg_size:]
-			frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-			frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-			cv2.imwrite(os.getcwd() + image_saved_path + '/front.png', frame)
+			side = imageDict['side_image']
+			cv2.imwrite(os.getcwd() + image_saved_path + '/side.png', side)
 
+			height_feet = imageDict['feet']
+			height_inch = imageDict['inch']
 
-			while len(data) < payload_size:
-				data += conn.recv(BUFFER_SIZE)
-				
-			packed_msg_size = data[:payload_size]
-			data = data[payload_size:]
-			msg_size = struct.unpack(">L", packed_msg_size)[0]
-
-			while len(data) < msg_size:
-				data += conn.recv(4096)
-
-			print ('Second Frame Received in Server')
-			frame_data = data[:msg_size]
-			data = data[msg_size:]
-			frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-			frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-			cv2.imwrite(os.getcwd() + image_saved_path + '/side.png', frame)
 
 			process_image()
+			waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image = get_human_info(height_feet, height_inch)
 
-			if os.path.isfile(os.getcwd() + image_process_path + '/front.png') and os.path.isfile(os.getcwd() + image_process_path + '/side.png'):
-				conn.send(b"Files received and processed in the Server. Sharing the processed image with Client")	
-				print ('LEAVING function "receive_images_from_client"')
-				break
+
+			imageDict = {'front_image': image, 'side_image': side_image, 'waist': round(waist), 'chest': round(chest), 'thigh': round(thigh), 'front_sleeve_in_cm': round(front_sleeve_in_cm), 'dis_in_cm': round(dis_in_cm) }
+			pickleData = pickle.dumps(imageDict)
+			conn.sendall(struct.pack('>I', len(pickleData)))
+			conn.sendall(pickleData)
+
+			print ('LEAVING function "receive_images_from_client"')
+			break
 
 
 		except Exception as e:
 			print ('In function "receive_images_from_client", Second Exception')
 			print (e)
-	
-
-def transfer_images_to_client():
-	print ('In Transfer Function')
-	global global_s, conn, client_IP
-
-	while 1:
-		try:
-			if os.path.isfile(os.getcwd() + image_process_path + '/front.png') and os.path.isfile(os.getcwd() + image_process_path + '/side.png'):
-
-				file_name = '/front.png'
-				frame = cv2.imread(os.getcwd() + image_process_path + file_name)
-				result, frame = cv2.imencode('.png', frame)
-				data = pickle.dumps(frame, 0)
-				size = len(data)
-				conn.sendall(struct.pack(">L", size) + data)
-
-
-				file_name = '/side.png'
-				frame = cv2.imread(os.getcwd() + image_process_path + file_name)
-				result, frame = cv2.imencode('.png', frame)
-				data = pickle.dumps(frame, 0)
-				size = len(data)
-				conn.sendall(struct.pack(">L", size) + data)
-				print ('LEAVING function "transfer_images_to_client"')
-				break
-
 		
-		except Exception as e:
-			print ('In function "transfer_images_to_client", First Exception')
-			print (e)
-
-
+	
 
 
 
@@ -151,7 +109,6 @@ if __name__ == "__main__":
 
 	while 1:
 		receive_images_from_client()
-		transfer_images_to_client()
 		global_s.close()
 		time.sleep(5.0)
 		global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

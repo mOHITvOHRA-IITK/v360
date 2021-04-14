@@ -15,10 +15,10 @@ if os.path.isdir(os.getcwd() + image_saved_path) == False:
 	os.mkdir(os.getcwd() + image_saved_path)
 
 # My private IP
-# SERVER_IP = '172.26.174.143'
+SERVER_IP = '172.26.174.143'
 
 # Visual360 server IP
-SERVER_IP = '74.82.31.134'
+# SERVER_IP = '74.82.31.134'
 
 PORT = 5000
 BUFFER_SIZE = 4096
@@ -29,91 +29,32 @@ global_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
 
-def receive_images_from_system():
-	print ('In Rceiving Function')
-	global global_s
 
-	while 1:
-		try:
-			data = b""
-			payload_size = struct.calcsize(">L")
-
-			while len(data) < payload_size:
-				data += global_s.recv(BUFFER_SIZE)
-				
-			packed_msg_size = data[:payload_size]
-			data = data[payload_size:]
-			msg_size = struct.unpack(">L", packed_msg_size)[0]
-
-			while len(data) < msg_size:
-				data += global_s.recv(4096)
-
-			print ('First Processed Frame Received')
-			frame_data = data[:msg_size]
-			data = data[msg_size:]
-			frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-			frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-			# cv2.imshow('front', frame)
-
-
-			while len(data) < payload_size:
-				data += global_s.recv(BUFFER_SIZE)
-				
-			packed_msg_size = data[:payload_size]
-			data = data[payload_size:]
-			msg_size = struct.unpack(">L", packed_msg_size)[0]
-
-			while len(data) < msg_size:
-				data += global_s.recv(4096)
-
-			print ('Second Processed Frame Received')
-			frame_data = data[:msg_size]
-			data = data[msg_size:]
-			frame=pickle.loads(frame_data, fix_imports=True, encoding="bytes")
-			frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
-			# cv2.imshow('side', frame)
-
-			print ('LEAVING function "receive_images_from_system"')
-			break
-
-
-		except Exception as e:
-			print ('In function "receive_images_from_system", First Exception')
-			print (e)
-				
-
-
-
-
-def transfer_images_to_server():
+def transfer_images_to_server(front, side, height_feet, height_inch):
 	print ('In Transfer Function')
 	global global_s
 
 	while 1:
 		try:
 	
-			if os.path.isfile(os.getcwd() + image_saved_path + '/front.png') and os.path.isfile(os.getcwd() + image_saved_path + '/side.png'):
-				global_s.connect((SERVER_IP, PORT))
-
-				file_name = '/front.png'
-				frame = cv2.imread(os.getcwd() + image_saved_path + file_name)
-				result, frame = cv2.imencode('.png', frame)
-				data = pickle.dumps(frame, 0)
-				size = len(data)
-				global_s.sendall(struct.pack(">L", size) + data)
+			global_s.connect((SERVER_IP, PORT))
 
 
-				file_name = '/side.png'
-				frame = cv2.imread(os.getcwd() + image_saved_path + file_name)
-				result, frame = cv2.imencode('.png', frame)
-				data = pickle.dumps(frame, 0)
-				size = len(data)
-				global_s.sendall(struct.pack(">L", size) + data)
+			## Create a dictionary of input data and send to the server
+			imageDict = {'front_image': front, 'side_image': side, 'feet': height_feet, 'inch': height_inch}
+			pickleData = pickle.dumps(imageDict)
+			global_s.sendall(struct.pack('>I', len(pickleData)))
+			global_s.sendall(pickleData)
+			
 
-				from_server = global_s.recv(4096)
-				print (from_server)
-				print ('LEAVING function "transfer_images_to_server"')
-				break
+			## Receive the processed data from server
+			data = b""
+			data_size = struct.unpack('>I', global_s.recv(4))[0]
+			while len(data) < data_size:
+				data += global_s.recv(BUFFER_SIZE)
+		
+			imageDict = pickle.loads(data, fix_imports=True, encoding="bytes")
+			return imageDict
 
 
 		except Exception as e:
@@ -125,9 +66,25 @@ def transfer_images_to_server():
 
 if __name__ == "__main__":
 	while 1:
+		file_name = '/front.png'
+		front = cv2.imread(os.getcwd() + image_saved_path + file_name)
+		file_name = '/side.png'
+		side = cv2.imread(os.getcwd() + image_saved_path + file_name)
+		height_feet = 5
+		height_inch = 6
 
-		transfer_images_to_server()
-		receive_images_from_system()
+		imageDict = transfer_images_to_server(front, side, height_feet, height_inch)
+
+		cv2.imshow('front', imageDict['front_image'])
+		cv2.imshow('side', imageDict['side_image'])
+		print ('waist', imageDict['waist'])
+		print ('chest', imageDict['chest'])
+		print ('thigh', imageDict['thigh'])
+		print ('front_sleeve_in_cm', imageDict['front_sleeve_in_cm'])
+		print ('dis_in_cm', imageDict['dis_in_cm'])
+		cv2.waitKey(1)	
+
+
 		global_s.close()
 		time.sleep(5.0)
 		global_s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

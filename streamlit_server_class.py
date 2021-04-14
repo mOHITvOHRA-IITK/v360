@@ -11,9 +11,6 @@ import networks
 from utils.transforms import transform_logits
 from datasets.simple_extractor_dataset import SimpleFolderDataset
 from functions import get_measuremnets
-
-import cv2
-import os
 import socket
 
 
@@ -108,8 +105,21 @@ def process_image():
 
 
 
+def get_human_info(height_feet, height_inch):
+
+	actual_height = (12*height_feet + height_inch) * 2.54 # in cm
+	i1_path = os.getcwd() + image_saved_path + '/front.png'
+	i1 = cv2.imread(i1_path)
+	m1_path = os.getcwd() + process_image_path + '/front.png'
+	m1 = cv2.imread(m1_path)
+	i2_path = os.getcwd() + image_saved_path + '/side.png'
+	i2 = cv2.imread(i2_path)
+	m2_path = os.getcwd() + process_image_path + '/side.png'
+	m2 = cv2.imread(m2_path)
+	_, human_waist, human_chest, human_thigh, human_front_sleeve_in_cm, human_dis_in_cm, human_image, human_side_image = get_measuremnets(i1, m1, i2, m2, actual_height, True)
 
 
+	return human_waist, human_chest, human_thigh, human_front_sleeve_in_cm, human_dis_in_cm, human_image, human_side_image
 
 
 

@@ -96,8 +96,8 @@ with options:
 	process = st.button('Process')
 	if process:
 		create_sender_obj()
-		load_images_on_server()
-		receive_processed_images_from_server()
+		imageDict = transfer_data_to_server()
+		store_imageDict(imageDict)
 
 		
 
@@ -170,36 +170,46 @@ with live_feed:
 
 
 
-		waist, chest, thigh, front_sleeve_in_cm, dis_in_cm, image, side_image = get_human_info()
-
-		if waist > 0:
-			string_data = 'waist ' + str(round(waist)) + '(cm), ' + str(round(waist/2.54)) + '(inches)'
-			input = waist_text.text_input('waist', value=string_data, key=key_count)
-
-		if chest > 0:
-			string_data = 'chest ' + str(round(chest)) + '(cm), ' + str(round(chest/2.54)) + '(inches)'
-			input = chest_text.text_input('chest', value=string_data, key=key_count)
-
-		if thigh > 0:
-			string_data = 'thigh ' + str(round(thigh)) + '(cm), ' + str(round(thigh/2.54)) + '(inches)'
-			input = thigh_text.text_input('thigh', value=string_data, key=key_count)
-
-		if front_sleeve_in_cm > 0:
-			string_data = 'front_sleeve ' + str(round(front_sleeve_in_cm)) + '(cm), ' + str(round(front_sleeve_in_cm/2.54)) + '(inches)'
-			input = sleeve_text.text_input('front_sleeve', value=string_data, key=key_count)
-
-		if dis_in_cm > 0:
-			string_data = 'length ' + str(round(dis_in_cm)) + '(cm), ' + str(round(dis_in_cm/2.54)) + '(inches)'
-			input = length_text.text_input('length', value=string_data, key=key_count)
+		imageDict, info_updated = get_imageDict()
+		if info_updated:
+			waist = imageDict['waist']
+			chest = imageDict['chest']
+			thigh = imageDict['thigh']
+			front_sleeve_in_cm = imageDict['front_sleeve_in_cm']
+			dis_in_cm = imageDict['dis_in_cm']
+			image = imageDict['front_image']
+			side_image = imageDict['side_image']
 
 
-		if np.array(image).size != 0:
-			image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-			image_widget.image(image, caption='Front image')
+
+			if waist > 0:
+				string_data = 'waist ' + str(round(waist)) + '(cm), ' + str(round(waist/2.54)) + '(inches)'
+				input = waist_text.text_input('waist', value=string_data, key=key_count)
+
+			if chest > 0:
+				string_data = 'chest ' + str(round(chest)) + '(cm), ' + str(round(chest/2.54)) + '(inches)'
+				input = chest_text.text_input('chest', value=string_data, key=key_count)
+
+			if thigh > 0:
+				string_data = 'thigh ' + str(round(thigh)) + '(cm), ' + str(round(thigh/2.54)) + '(inches)'
+				input = thigh_text.text_input('thigh', value=string_data, key=key_count)
+
+			if front_sleeve_in_cm > 0:
+				string_data = 'front_sleeve ' + str(round(front_sleeve_in_cm)) + '(cm), ' + str(round(front_sleeve_in_cm/2.54)) + '(inches)'
+				input = sleeve_text.text_input('front_sleeve', value=string_data, key=key_count)
+
+			if dis_in_cm > 0:
+				string_data = 'length ' + str(round(dis_in_cm)) + '(cm), ' + str(round(dis_in_cm/2.54)) + '(inches)'
+				input = length_text.text_input('length', value=string_data, key=key_count)
 
 
-		if np.array(side_image).size != 0:
-			side_image = cv2.cvtColor(side_image, cv2.COLOR_BGR2RGB)
-			side_image_widget.image(side_image, caption='Side image')
+			if np.array(image).size != 0:
+				image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+				image_widget.image(image, caption='Front image')
+
+
+			if np.array(side_image).size != 0:
+				side_image = cv2.cvtColor(side_image, cv2.COLOR_BGR2RGB)
+				side_image_widget.image(side_image, caption='Side image')
 		
 
