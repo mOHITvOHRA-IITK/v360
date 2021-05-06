@@ -20,11 +20,13 @@ if os.path.isdir(os.getcwd() + process_image_path) == False:
 	os.mkdir(os.getcwd() + process_image_path)
 
 
-# My private IP
-SERVER_IP = '172.26.174.143'
 
 # Visual360 server IP
-# SERVER_IP = '74.82.31.134'
+SERVER_IP = '74.82.31.134'
+
+# My private IP
+# SERVER_IP = ''
+
 
 PORT = 5000
 BUFFER_SIZE = 4096

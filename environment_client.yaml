@@ -5,7 +5,6 @@ channels:
 dependencies:
   - opencv=4.5
   - streamlit=0.79.0
-  - tqdm
   - ninja
   - scikit-image
   - termcolor
